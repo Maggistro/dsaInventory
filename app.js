@@ -6,11 +6,20 @@ import {
   verifyKeyMiddleware,
 } from 'discord-interactions';
 import { getRandomEmoji } from './utils.js';
+import { ADD_ITEM, addItem } from './commands/addItem.js';
+import { saveDbMiddleware } from './data/saveDbMiddleware.js';
+import { CREATE_INVENTORY, createInventory } from './commands/createInventory.js';
 
 // Create an express app
 const app = express();
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
+
+app.get('/interactions', (req, res) => {
+  res.status(200).json({ "Hello ngrok": true });
+});
+
+app.use(saveDbMiddleware);
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -33,6 +42,14 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
    */
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
+    const userId = req.body.member.user.id;
+
+    switch (name) {
+      case ADD_ITEM:
+        return addItem(req.body.data, db, userId)
+      case CREATE_INVENTORY:
+        return createInventory(req.body.data, db, userId)
+    }
 
     // "test" command
     if (name === 'test') {
