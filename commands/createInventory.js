@@ -1,5 +1,6 @@
 import { InteractionResponseType } from "discord-interactions";
 import { getInventoryByName } from "../data/getInventoryByName.js";
+import { getDb } from "../data/getDb.js";
 
 const CREATE_INVENTORY = 'createinventory';
 
@@ -27,15 +28,22 @@ const createInventoryDefinition = {
 const createInventory = (data, userId, res) => {
     const name = data.options[0].value;
     if (getInventoryByName(name)) {
-        return res.status(400).json({ error: 'Inventar existiert bereits' });
+        return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+            content: 'Inventar existiert bereits',
+            },
+        });
     }
 
-    db.inventories[name] = {
+    getDb().inventories[name] = {
         userId,
         items: []
     };
 
-    db.activeInventory[userId] = name;
+    console.log(JSON.stringify(getDb()));
+    getDb().activeInventories[userId] = name;
+    console.log(JSON.stringify(getDb()));
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

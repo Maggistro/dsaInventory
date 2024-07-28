@@ -19,6 +19,7 @@ app.get('/interactions', (req, res) => {
   res.status(200).json({ "Hello ngrok": true });
 });
 
+
 app.use(saveDbMiddleware);
 
 /**
@@ -46,9 +47,9 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
 
     switch (name) {
       case ADD_ITEM:
-        return addItem(req.body.data, db, userId)
+        return addItem(req.body.data, userId, res)
       case CREATE_INVENTORY:
-        return createInventory(req.body.data, db, userId)
+        return createInventory(req.body.data, userId, res)
     }
 
     // "test" command
