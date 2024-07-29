@@ -53,7 +53,12 @@ const listItems = (data, userId, res) => {
     let inventory = getInventory(userId, optionalName);
 
     if (!inventory) {
-      return res.status(404).json({ error: "Inventar nicht gefunden"})
+        return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+                content: "Inventar nicht gefunden"
+            }
+        })
     }
 
     if(userId !== inventory.userId && !inventory.shared) {

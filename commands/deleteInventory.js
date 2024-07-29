@@ -27,7 +27,7 @@ const deleteInventory = (data, userId, res) => {
       data: {
         content: `Inventar gelöscht`,
       },
-    })
+    });
 }
 
 export { DELETE_INVENTORY, deleteInventoryDefinition, deleteInventory }

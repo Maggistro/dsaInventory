@@ -10,10 +10,10 @@ const listInventoriesDefinition = {
 }
 
 const listInventories = (data, userId, res) => {
-    const list = getAllInventories()
+    const list = Object.values(getAllInventories())
         .filter(inventory => inventory.userId === userId || inventory.shared)
         .reduce(
-            inventory => inventory.name + '\n', 
+            (list, inventory) => list + inventory.name + '\n', 
             'Inventarliste: \n'
         );
     

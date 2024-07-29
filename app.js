@@ -11,6 +11,8 @@ import { CREATE_INVENTORY, createInventory } from './commands/createInventory.js
 import { DELETE_ITEM, deleteItem } from './commands/deleteItem.js';
 import { LIST_ITEMS, listItems } from './commands/listItems.js';
 import { DELETE_INVENTORY, deleteInventory } from './commands/deleteInventory.js';
+import { LIST_INVENTORIES, listInventories } from './commands/listInventories.js';
+import { ACTIVATE_INVENTORY, activateInventory } from './commands/activateInventory.js';
 
 // Create an express app
 const app = express();
@@ -48,16 +50,20 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
     const userId = req.body.member?.user?.id | req.body.user.id;
 
     switch (name) {
+      case ACTIVATE_INVENTORY:
+        return activateInventory(req.body.data, userId, res);
       case ADD_ITEM:
         return addItem(req.body.data, userId, res);
       case CREATE_INVENTORY:
         return createInventory(req.body.data, userId, res);
-      case DELETE_ITEM:
-        return deleteItem(req.body.data, userId, res);
-      case LIST_ITEMS:
-        return listItems(req.body.data, userId, res);
       case DELETE_INVENTORY:
         return deleteInventory(req.body.data, userId, res);
+      case DELETE_ITEM:
+        return deleteItem(req.body.data, userId, res);
+      case LIST_INVENTORIES:
+        return listInventories(req.body.data, userId, res);
+      case LIST_ITEMS:
+        return listItems(req.body.data, userId, res);
       default:
         return res.status(400).json({ error: `${name} ist keine gültige Anweisung`});
     }
