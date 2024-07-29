@@ -36,13 +36,16 @@ const addItemDefinition = {
   
 
 const addItem = (data, userId, res) => {
-    let inventoryName = getDb().activeInventories[userId];
+    let inventory = getDb().activeInventories[userId];
     if (data.options[2]) {
-        if (!getInventoryByName(data.options[2].value)) {
-            return res.status(404).json({ error: "Alternatives Inventar nicht gefunden"})
+        inventory = getInventoryByName(data.options[2].value)
+        if (!inventory) {
+          return res.status(404).json({ error: "Alternatives Inventar nicht gefunden"})
         }
 
-        inventoryName = getDb().inventories[data.options[2].value];
+        if(!inventory.shared) {
+          return res.status(404).json({ error: "Dieses Inventar gehört einem anderen Nutzer"})
+        }
     }
 
     if (data.options[1].value === 0) {
@@ -50,15 +53,15 @@ const addItem = (data, userId, res) => {
       return deleteItem(data, userId, res);
     }
     
-    let item = getInventoryByName(inventoryName).items.find(item => item.name === data.options[0].value);
+    let item = inventory.items.find(item => item.name === data.options[0].value);
 
     if (!item) {
-      getInventoryByName(inventoryName).items.push({
+      inventory.items.push({
           name: data.options[0].value,
           count: data.options[1].value
       });
     } else {
-      getInventoryByName(inventoryName).items = getInventoryByName(inventoryName).items.map(item => {
+      inventory.items = inventory.items.map(item => {
         if (item.name === data.options[0].value) {
           item.count = data.options[1].value
         }
