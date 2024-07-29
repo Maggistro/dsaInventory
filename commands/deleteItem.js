@@ -1,6 +1,5 @@
 import { InteractionResponseType } from "discord-interactions";
-import { getDb } from "../data/getDb.js";
-import { getInventoryByName } from "../data/getInventoryByName.js";
+import { getInventory } from "../data/getInventory.js";
 import { createInventoryChoices, createItemChoices } from "./choices.js";
 
 const DELETE_ITEM = 'deleteitem';
@@ -13,15 +12,13 @@ const deleteItemDefinition = {
         type: 3,
         name: 'item',
         description: 'Itemname',
-        required: true,
-        choices: createItemChoices(),
+        required: true
       },
       {
         type: 3,
         name: 'inventory',
         description: 'Alternatives Inventar',
-        required: false,
-        choices: createInventoryChoices(),
+        required: false
       },
     ],
     type: 1,
@@ -29,27 +26,25 @@ const deleteItemDefinition = {
   
 
 const deleteItem = (data, userId, res) => {
-    let inventoryName = getDb().activeInventories[userId];
-    if (data.options[2]) {
-        if (!getInventoryByName(data.options[2].value)) {
-            return res.status(404).json({ error: "Alternatives Inventar nicht gefunden"})
-        }
+    const optionalName = data.options[2] ? data.options[2].value : null;
+    let inventory = getInventory(userId, optionalName);
 
-        if(!getInventoryByName(data.options[2].value).shared) {
-          return res.status(404).json({ error: "Dieses Inventar gehört einem anderen Nutzer"})
-        }
-
-        inventoryName = getDb().inventories[data.options[2].value];
+    if (!inventory) {
+      return res.status(404).json({ error: "Inventar nicht gefunden"})
     }
 
-    let item = getInventoryByName(inventoryName).items
+    if(userId !== inventory.userId && !inventory.shared) {
+      return res.status(404).json({ error: "Dieses Inventar gehört einem anderen Nutzer"})
+    }
+
+    let item = inventory.items
         .find(item => item.name === data.options[0].value);
 
     if (!item) {
         return res.status(404).json({ error: "Item nicht gefunden" });
     }
 
-    getInventoryByName(inventoryName).items = getInventoryByName(inventoryName).items
+    inventory.items = inventory.items
         .filter(item => item.name !== data.options[0].value);
 
     return res.send({

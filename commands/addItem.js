@@ -1,6 +1,5 @@
 import { InteractionResponseType } from "discord-interactions";
-import { getDb } from "../data/getDb.js";
-import { getInventoryByName } from "../data/getInventoryByName.js";
+import { getInventory } from "../data/getInventory.js";
 import { deleteItem } from "./deleteItem.js";
 import { createInventoryChoices, createItemChoices } from "./choices.js";
 
@@ -15,7 +14,6 @@ const addItemDefinition = {
         name: 'item',
         description: 'Itemname',
         required: true,
-        choices: createItemChoices(),
       },
       {
         type: 4,
@@ -25,10 +23,15 @@ const addItemDefinition = {
       },
       {
         type: 3,
+        name: 'weight',
+        description: 'Gewicht einer Einheit',
+        required: false,
+      },
+      {
+        type: 3,
         name: 'inventory',
         description: 'Alternatives Inventar',
         required: false,
-        choices: createInventoryChoices(),
       },
     ],
     type: 1,
@@ -36,16 +39,15 @@ const addItemDefinition = {
   
 
 const addItem = (data, userId, res) => {
-    let inventory = getDb().activeInventories[userId];
-    if (data.options[2]) {
-        inventory = getInventoryByName(data.options[2].value)
-        if (!inventory) {
-          return res.status(404).json({ error: "Alternatives Inventar nicht gefunden"})
-        }
+    const optionalName = data.options[4] ? data.options[4].value : null;
+    let inventory = getInventory(userId, optionalName);
 
-        if(!inventory.shared) {
-          return res.status(404).json({ error: "Dieses Inventar gehört einem anderen Nutzer"})
-        }
+    if (!inventory) {
+      return res.status(404).json({ error: "Inventar nicht gefunden"})
+    }
+
+    if(userId !== inventory.userId && !inventory.shared) {
+      return res.status(404).json({ error: "Dieses Inventar gehört einem anderen Nutzer"})
     }
 
     if (data.options[1].value === 0) {
@@ -58,12 +60,14 @@ const addItem = (data, userId, res) => {
     if (!item) {
       inventory.items.push({
           name: data.options[0].value,
-          count: data.options[1].value
+          count: data.options[1].value,
+          weight: data.options ? Number.parseFloat(data.options[2].value) : 0,
       });
     } else {
       inventory.items = inventory.items.map(item => {
         if (item.name === data.options[0].value) {
-          item.count = data.options[1].value
+          item.count = item.count + data.options[1].value
+          item.weight = data.options[2] ? Number.parseFloat(data.options[2].value): 0;
         }
         return item;
       });
