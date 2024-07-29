@@ -28,7 +28,7 @@ const addItemDefinition = {
         name: 'inventory',
         description: 'Alternatives Inventar',
         required: false,
-        choices: createInventoryChoices(),
+        choices: createInventoryChoices(userId),
       },
     ],
     type: 1,
