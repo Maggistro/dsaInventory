@@ -9,6 +9,7 @@ import { getRandomEmoji } from './utils.js';
 import { ADD_ITEM, addItem } from './commands/addItem.js';
 import { saveDbMiddleware } from './data/saveDbMiddleware.js';
 import { CREATE_INVENTORY, createInventory } from './commands/createInventory.js';
+import { DELETE_ITEM, deleteItem } from './commands/deleteItem.js';
 
 // Create an express app
 const app = express();
@@ -47,9 +48,13 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
 
     switch (name) {
       case ADD_ITEM:
-        return addItem(req.body.data, userId, res)
+        return addItem(req.body.data, userId, res);
       case CREATE_INVENTORY:
-        return createInventory(req.body.data, userId, res)
+        return createInventory(req.body.data, userId, res);
+      case DELETE_ITEM:
+        return deleteItem(req.body.data, userId, res);
+      default:
+        return res.status(400).json({ error: `${name} ist keine gültige Anweisung`});
     }
 
     // "test" command

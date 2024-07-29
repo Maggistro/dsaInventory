@@ -2,7 +2,6 @@ import { InteractionResponseType } from "discord-interactions";
 import { getAllInventories } from "../data/getAllInventories.js";
 import { getDb } from "../data/getDb.js";
 import { getInventoryByName } from "../data/getInventoryByName.js";
-import { deleteItem } from "./deleteItem.js";
 
 const createItemChoices = (name) => {
     return getInventoryByName(name)?.items?.map(item => ({
@@ -18,11 +17,11 @@ const createInventoryChoices = () => {
     }));
 }
 
-const ADD_ITEM = 'additem';
+const DELETE_ITEM = 'deleteitem';
 
-const addItemDefinition = {
-    name: ADD_ITEM,
-    description: 'Add or Increase Item',
+const deleteItemDefinition = {
+    name: DELETE_ITEM,
+    description: 'Lösche ein item',
     options: [
       {
         type: 3,
@@ -30,12 +29,6 @@ const addItemDefinition = {
         description: 'Itemname',
         required: true,
         choices: createItemChoices(),
-      },
-      {
-        type: 4,
-        name: 'count',
-        description: 'Neue Anzahl der Items',
-        required: true,
       },
       {
         type: 3,
@@ -49,7 +42,7 @@ const addItemDefinition = {
   };
   
 
-const addItem = (data, userId, res) => {
+const deleteItem = (data, userId, res) => {
     let inventoryName = getDb().activeInventories[userId];
     if (data.options[2]) {
         if (!getInventoryByName(data.options[2].value)) {
@@ -59,33 +52,22 @@ const addItem = (data, userId, res) => {
         inventoryName = getDb().inventories[data.options[2].value];
     }
 
-    if (data.options[1].value === 0) {
-      data.options[1] = data.options[2];
-      return deleteItem(data, userId, res);
-    }
-    
-    let item = getInventoryByName(inventoryName).items.find(item => item.name === data.options[0].value);
+    let item = getInventoryByName(inventoryName).items
+        .find(item => item.name === data.options[0].value);
 
     if (!item) {
-      getInventoryByName(inventoryName).items.push({
-          name: data.options[0].value,
-          count: data.options[1].value
-      });
-    } else {
-      getInventoryByName(inventoryName).items = getInventoryByName(inventoryName).items.map(item => {
-        if (item.name === data.options[0].value) {
-          item.count = data.options[1].value
-        }
-        return item;
-      });
+        return res.status(404).json({ error: "Item nicht gefunden" });
     }
+
+    getInventoryByName(inventoryName).items = getInventoryByName(inventoryName).items
+        .filter(item => item.name !== data.options[0].value);
 
     return res.send({
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
       data: {
-        content: `Item ${data.options[0].value} mit Anzahl ${data.options[1].value} aktualisiert`,
+        content: `Item ${data.options[0].value} gelöscht`,
       },
   });
 }
 
-export { ADD_ITEM, addItemDefinition, addItem }
+export { DELETE_ITEM, deleteItemDefinition, deleteItem }
