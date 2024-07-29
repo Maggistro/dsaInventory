@@ -8,9 +8,8 @@ export const createItemChoices = (name) => {
     })) && [];
 }
 
-export const createInventoryChoices = (userId) => {
+export const createInventoryChoices = () => {
     return getAllInventories()
-        .filter(inventory => inventory.userId === userId || inventory.shared)
         .map(inventory => ({
             name: inventory.name,
             value: inventory.name
