@@ -35,6 +35,10 @@ const deleteItem = (data, userId, res) => {
             return res.status(404).json({ error: "Alternatives Inventar nicht gefunden"})
         }
 
+        if(!getInventoryByName(data.options[2].value).shared) {
+          return res.status(404).json({ error: "Dieses Inventar gehört einem anderen Nutzer"})
+        }
+
         inventoryName = getDb().inventories[data.options[2].value];
     }
 
