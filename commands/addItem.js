@@ -1,4 +1,6 @@
+import { InteractionResponseType } from "discord-interactions";
 import { getAllInventories } from "../data/getAllInventories.js";
+import { getDb } from "../data/getDb.js";
 import { getInventoryByName } from "../data/getInventoryByName.js";
 
 const createItemChoices = (name) => {
@@ -47,23 +49,37 @@ const addItemDefinition = {
   
 
 const addItem = (data, userId, res) => {
-    let inventory = db.activeInventories[userId];
+    let inventoryName = getDb().activeInventories[userId];
     if (data.options[2]) {
         if (!getInventoryByName(data.options[2].value)) {
             return res.status(404).json({ error: "Alternatives Inventar nicht gefunden"})
         }
 
-        inventory = db.inventories[data.options[2].value];
+        inventoryName = getDb().inventories[data.options[2].value];
     }
     
-    let item = data[inventory].items.find(item => item.name === data.options[0].value);
+    let item = getInventoryByName(inventoryName).items.find(item => item.name === data.options[0].value);
 
     if (!item) {
-        item = {
-            name: data.options[0].value,
-            count: data.options[1].value
+      getInventoryByName(inventoryName).items.push({
+          name: data.options[0].value,
+          count: data.options[1].value
+      });
+    } else {
+      getInventoryByName(inventoryName).items = getInventoryByName(inventoryName).items.map(item => {
+        if (item.name === data.options[0].value) {
+          item.count = data.options[1].value
         }
+        return item;
+      });
     }
+
+    return res.send({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: {
+        content: `Item ${data.options[0].value} mit Anzahl ${data.options[1].value} aktualisiert`,
+      },
+  });
 }
 
 export { ADD_ITEM, addItemDefinition, addItem }
