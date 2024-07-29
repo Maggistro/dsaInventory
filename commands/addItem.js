@@ -1,22 +1,8 @@
 import { InteractionResponseType } from "discord-interactions";
-import { getAllInventories } from "../data/getAllInventories.js";
 import { getDb } from "../data/getDb.js";
 import { getInventoryByName } from "../data/getInventoryByName.js";
 import { deleteItem } from "./deleteItem.js";
-
-const createItemChoices = (name) => {
-    return getInventoryByName(name)?.items?.map(item => ({
-        name: item.name,
-        value: item.name
-    })) && [];
-}
-
-const createInventoryChoices = () => {
-    return Object.keys(getAllInventories()).map(inventoryName => ({
-        name: inventoryName,
-        value: inventoryName
-    }));
-}
+import { createInventoryChoices, createItemChoices } from "./choices.js";
 
 const ADD_ITEM = 'additem';
 

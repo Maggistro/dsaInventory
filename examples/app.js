@@ -8,7 +8,7 @@ import {
   ButtonStyleTypes,
   verifyKeyMiddleware,
 } from 'discord-interactions';
-import { getRandomEmoji, DiscordRequest } from './utils.js';
+import { DiscordRequest } from './utils.js';
 import { getShuffledOptions, getResult } from './game.js';
 
 // Create an express app
@@ -48,7 +48,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           // Fetches a random emoji to send from a helper function
-          content: `hello world ${getRandomEmoji()}`,
+          content: `hello world `,
         },
       });
     }
@@ -161,7 +161,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
           await DiscordRequest(endpoint, {
             method: 'PATCH',
             body: {
-              content: 'Nice choice ' + getRandomEmoji(),
+              content: 'Nice choice',
               components: [],
             },
           });

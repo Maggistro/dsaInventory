@@ -5,11 +5,11 @@ import {
   InteractionResponseType,
   verifyKeyMiddleware,
 } from 'discord-interactions';
-import { getRandomEmoji } from './utils.js';
 import { ADD_ITEM, addItem } from './commands/addItem.js';
 import { saveDbMiddleware } from './data/saveDbMiddleware.js';
 import { CREATE_INVENTORY, createInventory } from './commands/createInventory.js';
 import { DELETE_ITEM, deleteItem } from './commands/deleteItem.js';
+import { LIST_ITEMS, listItems } from './commands/listItems.js';
 
 // Create an express app
 const app = express();
@@ -53,24 +53,11 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         return createInventory(req.body.data, userId, res);
       case DELETE_ITEM:
         return deleteItem(req.body.data, userId, res);
+      case LIST_ITEMS:
+        return listItems(req.body.data, userId, res);
       default:
         return res.status(400).json({ error: `${name} ist keine gültige Anweisung`});
     }
-
-    // "test" command
-    if (name === 'test') {
-      // Send a message into the channel where command was triggered from
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          // Fetches a random emoji to send from a helper function
-          content: `hello world ${getRandomEmoji()}`,
-        },
-      });
-    }
-
-    console.error(`unknown command: ${name}`);
-    return res.status(400).json({ error: 'unknown command' });
   }
 
   console.error('unknown interaction type', type);
