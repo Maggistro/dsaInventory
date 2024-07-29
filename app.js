@@ -47,7 +47,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
    */
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
-    const userId = req.body.member?.user?.id | req.body.user.id;
+    const userId = req.body.member?.user?.id || req.body.user.id;
 
     switch (name) {
       case ACTIVATE_INVENTORY:

@@ -61,13 +61,13 @@ const addItem = (data, userId, res) => {
       inventory.items.push({
           name: data.options[0].value,
           count: data.options[1].value,
-          weight: data.options ? Number.parseFloat(data.options[2].value) : 0,
+          weight: data.options[2] ? Number.parseFloat(data.options[2].value) : 0,
       });
     } else {
       inventory.items = inventory.items.map(item => {
         if (item.name === data.options[0].value) {
           item.count = item.count + data.options[1].value
-          item.weight = data.options[2] ? Number.parseFloat(data.options[2].value): 0;
+          item.weight = data.options[2] ? Number.parseFloat(data.options[2].value): item.weight;
         }
         return item;
       });
