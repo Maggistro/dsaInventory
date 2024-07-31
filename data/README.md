@@ -3,14 +3,16 @@
 Kurze Übersicht der Datentypen
 
 ## Item
+
 ```
 {
-    name: Name des Items <String> 
+    name: Name des Items <String>
     count: Anzahl des Items <Int>
 }
 ```
 
 ## Inventar
+
 ```
 {
     userId: Besitzer des Inventars <String>

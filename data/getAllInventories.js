@@ -1,8 +1,8 @@
-import { getDb } from "./getDb.js";
+import { getDb } from './getDb.js'
 
 /**
  * @returns {Array}
  */
 export const getAllInventories = () => {
-    return getDb().inventories;
+    return getDb().inventories
 }
