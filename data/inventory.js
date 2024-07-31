@@ -1,4 +1,4 @@
-import { getDb } from './getDb.js'
+import { getDb } from '@data/getDb.js'
 
 export const getAllInventories = () => {
     // do not resolve items
@@ -10,9 +10,11 @@ export const getInventory = async (userId, name) => {
     let result = [];
     if (name) {
         result = await getDb().all(`SELECT * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE invenvory.name = '${name}'`);
+    } else {
+        result = await getDb().all(`SELECT * FROM inventory WHERE (userId = '${userId}' AND active = 1)`);
     }
-    result = await getDb().all(`SELECT * FROM inventory WHERE (userId = '${userId}' AND active = 1)`);
 
+    console.log(getDb().config);
     if (result.length === 0) {
         return null;
     }

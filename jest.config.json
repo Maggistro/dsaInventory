@@ -2,5 +2,8 @@
   "setupFiles": [
     "<rootDir>\\test\\setUp.js"
   ],
-  "transform": {}
+  "transform": {},
+  "moduleNameMapper": {
+    "@data/(.*)": "<rootDir>\\data\\$1"
+  }
 }
