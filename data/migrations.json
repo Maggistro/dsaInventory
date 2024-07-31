@@ -2,7 +2,7 @@
     "0": {
         "up": [
             "CREATE TABLE inventory (id int, name varchar(255), userId varchar(255), active int, PRIMARY KEY (id), CONSTRAINT active_inventory UNIQUE (userId, active));",
-            "CREATE TABLE item (name varchar(255), count int, inventory int, PRIMARY KEY (name), FOREIGN KEY (inventory) REFERENCES inventory(id));"
+            "CREATE TABLE item (id int, name varchar(255), count int, inventory int, PRIMARY KEY (id), FOREIGN KEY (inventory) REFERENCES inventory(id), CONSTRAINT inventory_item UNIQUE (name, inventory));"
         ],
         "down": [
             "DROP TABLE item; DROP TABLE inventory"
@@ -14,6 +14,14 @@
         ],
         "down": [
             "ALTER TABLE inventory DROP COLUMN shared;"
+        ]
+    },
+    "2": {
+        "up": [
+            "ALTER TABLE item ADD weight float DEFAULT 0;"
+        ],
+        "down": [
+            "ALTER TABLE item DROP COLUMN weight;"
         ]
     }
 }

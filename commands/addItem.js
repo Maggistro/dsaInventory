@@ -1,7 +1,7 @@
 import { InteractionResponseType } from 'discord-interactions'
-import { getInventory } from '../data/getInventory.js'
 import { deleteItem } from './deleteItem.js'
-import { createInventoryChoices, createItemChoices } from './choices.js'
+import { getInventory } from '../data/inventory.js'
+import { insertItem, updateItem } from '../data/item.js'
 
 const ADD_ITEM = 'additem'
 
@@ -37,9 +37,9 @@ const addItemDefinition = {
     type: 1,
 }
 
-const addItem = (data, userId, res) => {
+const addItem = async (data, userId, res) => {
     const optionalName = data.options[4] ? data.options[4].value : null
-    let inventory = getInventory(userId, optionalName)
+    let inventory = await getInventory(userId, optionalName)
 
     if (!inventory) {
         return res.status(404).json({ error: 'Inventar nicht gefunden' })
@@ -61,23 +61,18 @@ const addItem = (data, userId, res) => {
     )
 
     if (!item) {
-        inventory.items.push({
-            name: data.options[0].value,
-            count: data.options[1].value,
-            weight: data.options[2]
-                ? Number.parseFloat(data.options[2].value)
-                : 0,
-        })
+        await insertItem(
+            inventory.id,
+            data.options[0].value,
+            data.options[1].value,
+            data.options[2] ? Number.parseFloat(data.options[2].value) : 0,
+        )
     } else {
-        inventory.items = inventory.items.map((item) => {
-            if (item.name === data.options[0].value) {
-                item.count = item.count + data.options[1].value
-                item.weight = data.options[2]
-                    ? Number.parseFloat(data.options[2].value)
-                    : item.weight
-            }
-            return item
-        })
+        await updateItem(
+            item.id,
+            item.count = item.count + data.options[1].value,
+            item.weight = data.options[2] ? Number.parseFloat(data.options[2].value) : item.weight
+        );
     }
 
     return res.send({

@@ -1,6 +1,6 @@
 import { InteractionResponseType } from 'discord-interactions'
-import { getInventory } from '../data/getInventory.js'
-import { createInventoryChoices, createItemChoices } from './choices.js'
+import { getInventory } from '../data/inventory.js'
+import { removeItemByName } from '../data/item.js'
 
 const DELETE_ITEM = 'deleteitem'
 
@@ -24,9 +24,9 @@ const deleteItemDefinition = {
     type: 1,
 }
 
-const deleteItem = (data, userId, res) => {
-    const optionalName = data.options[2] ? data.options[2].value : null
-    let inventory = getInventory(userId, optionalName)
+const deleteItem = async (data, userId, res) => {
+    const optionalName = data.options[1] ? data.options[1].value : null
+    let inventory = await getInventory(userId, optionalName);
 
     if (!inventory) {
         return res.status(404).json({ error: 'Inventar nicht gefunden' })
@@ -38,17 +38,7 @@ const deleteItem = (data, userId, res) => {
             .json({ error: 'Dieses Inventar gehört einem anderen Nutzer' })
     }
 
-    let item = inventory.items.find(
-        (item) => item.name === data.options[0].value
-    )
-
-    if (!item) {
-        return res.status(404).json({ error: 'Item nicht gefunden' })
-    }
-
-    inventory.items = inventory.items.filter(
-        (item) => item.name !== data.options[0].value
-    )
+    await removeItemByName(inventory.id, data.options[0].value);
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

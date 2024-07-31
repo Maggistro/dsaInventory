@@ -2,8 +2,7 @@ import {
     InteractionResponseType,
     InteractionResponseFlags,
 } from 'discord-interactions'
-import { createInventoryChoices } from './choices.js'
-import { getInventory } from '../data/getInventory.js'
+import { getInventory } from '../data/inventory.js'
 
 const LIST_ITEMS = 'listitems'
 
@@ -63,9 +62,9 @@ const buildTable = (inventory) => {
     )
 }
 
-const listItems = (data, userId, res) => {
+const listItems = async (data, userId, res) => {
     const optionalName = data.options ? data.options[0].value : null
-    let inventory = getInventory(userId, optionalName)
+    let inventory = await getInventory(userId, optionalName)
 
     if (!inventory) {
         return res.send({

@@ -6,8 +6,11 @@ Kurze Übersicht der Datentypen
 
 ```
 {
-    name: Name des Items <String>
-    count: Anzahl des Items <Int>
+    id: Datenbank ID
+    name: Name des Items
+    count: Anzahl des Items
+    weight: Gewicht einer einheit
+    inventory: ID des inventars
 }
 ```
 
@@ -15,8 +18,11 @@ Kurze Übersicht der Datentypen
 
 ```
 {
+    id: Datenbank ID
+    name: Name des Inventars
     userId: Besitzer des Inventars <String>
-    items: Liste der Items <Array>
+    active: Zeigt activ benutztes Inventar des Besitzers
+    items: Liste der Items (via join)
     shared: Wenn ja wird besitzer ignoriert <Bool>
 }
 ```

@@ -1,18 +1,41 @@
 import { getDb } from './getDb.js'
 
-/**
- * @returns {Array}
- */
 export const getAllInventories = () => {
+    // do not resolve items
     return getDb().all("SELECT * from inventory");
 }
 
-export const getInventory = (userId, name) => {
+export const getInventory = async (userId, name) => {
     // if name was given, ignore userId
+    let result = [];
     if (name) {
-        return getDb().get(`SELECT * FROM inventory WHERE name = ${name}`);
+        result = await getDb().all(`SELECT * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE invenvory.name = ${name}`);
     }
-    return getDb().get(`SELECT * FROM inventory WHERE (userId = ${userId} AND active = 1)`)
+    result = await getDb().all(`SELECT * FROM inventory WHERE (userId = ${userId} AND active = 1)`);
+
+    if (result.length === 0) {
+        return null;
+    }
+
+    // build js object from result list
+    return result.reduce((inventory, entry) => {
+        inventory.items.push({
+            id: entry.id,
+            name: entry.name,
+            count: entry.count,
+            weight: entry.weight,
+            inventory: entry.inventory,
+        });
+
+        return inventory;
+    }, {
+        id: result[0].id,
+        name: result[0].name,
+        userId: result[0].userId,
+        active: result[0].active,
+        shared: result[0].shared,
+        items: [],
+    });
 }
 
 export const switchInventory = async (userId, name) => {
