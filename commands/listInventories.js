@@ -1,4 +1,4 @@
-import { InteractionResponseType } from 'discord-interactions'
+import { InteractionResponseFlags, InteractionResponseType } from 'discord-interactions'
 import { getAllInventories } from '../data/inventory.js'
 
 const LIST_INVENTORIES = 'listinventories'
@@ -10,7 +10,7 @@ const listInventoriesDefinition = {
 }
 
 const listInventories = async (data, userId, res) => {
-    const list = await getAllInventories()
+    const list = (await getAllInventories())
         .filter((inventory) => inventory.userId === userId || inventory.shared)
         .reduce(
             (list, inventory) => list + inventory.name + '\n',
@@ -20,6 +20,7 @@ const listInventories = async (data, userId, res) => {
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
+            flags: InteractionResponseFlags.EPHEMERAL,
             content: list,
         },
     })

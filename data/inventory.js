@@ -1,7 +1,6 @@
 import { getDb } from './getDb.js'
 
-export const getAllInventories = () => {
-    // do not resolve items
+export const getAllInventories = async () => {
     return getDb().all("SELECT * from inventory");
 }
 
