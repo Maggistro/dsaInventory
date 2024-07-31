@@ -12,7 +12,8 @@
         "start": "node app.js",
         "register": "node commands/commands.js",
         "dev": "nodemon app.js",
-        "prettier": "npx prettier . --write"
+        "prettier": "npx prettier . --write",
+        "migrate": "node data/migrate.js"
     },
     "author": "Shay DeWael",
     "license": "MIT",
@@ -20,6 +21,7 @@
         "discord-interactions": "^4.0.0",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
+        "sqlite": "^5.1.1",
         "sqlite3": "^5.1.7"
     },
     "devDependencies": {
