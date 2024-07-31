@@ -1,4 +1,4 @@
-import { getDb } from '@data/getDb.js'
+import { getDb } from './getDb.js'
 
 export const getAllInventories = () => {
     // do not resolve items
