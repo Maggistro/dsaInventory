@@ -9,9 +9,9 @@ export const getInventory = async (userId, name) => {
     // if name was given, ignore userId
     let result = [];
     if (name) {
-        result = await getDb().all(`SELECT * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE inventory.name = '${name}'`);
+        result = await getDb().all(`SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE inventory.name = '${name}'`);
     } else {
-        result = await getDb().all(`SELECT * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE (userId = '${userId}' AND active = 1)`);
+        result = await getDb().all(`SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE (userId = '${userId}' AND active = 1)`);
     }
 
     if (result.length === 0) {
@@ -30,8 +30,8 @@ export const getInventory = async (userId, name) => {
 
         return inventory;
     }, {
-        id: result[0].id,
-        name: result[0].name,
+        id: result[0].inv_id,
+        name: result[0].inv_name,
         userId: result[0].userId,
         active: result[0].active,
         shared: result[0].shared,

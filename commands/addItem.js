@@ -38,7 +38,7 @@ const addItemDefinition = {
 }
 
 const addItem = async (data, userId, res) => {
-    const optionalName = data.options[4] ? data.options[4].value : null
+    const optionalName = data.options[3] ? data.options[3].value : null
     let inventory = await getInventory(userId, optionalName)
 
     if (!inventory) {
@@ -55,6 +55,7 @@ const addItem = async (data, userId, res) => {
         data.options[1] = data.options[2]
         return deleteItem(data, userId, res)
     }
+
 
     let item = inventory.items.find(
         (item) => item.name === data.options[0].value
