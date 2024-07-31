@@ -1,7 +1,5 @@
 import { InteractionResponseType } from 'discord-interactions'
-import { createInventoryChoices } from './choices.js'
-import { getDb } from '../data/getDb.js'
-import { getInventory } from '../data/getInventory.js'
+import { removeInventory } from '../data/inventory.js'
 
 const DELETE_INVENTORY = 'deleteinventory'
 
@@ -19,9 +17,10 @@ const deleteInventoryDefinition = {
     type: 1,
 }
 
-const deleteInventory = (data, userId, res) => {
-    const inventory = getInventory(userId)
-    delete getDb().inventories[inventory.name]
+const deleteInventory = async (data, userId, res) =>  {
+    
+    await removeInventory(userId, data.options[0]?.value);
+
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {

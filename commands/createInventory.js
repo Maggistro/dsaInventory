@@ -1,6 +1,5 @@
 import { InteractionResponseType } from 'discord-interactions'
-import { getInventory } from '../data/getInventory.js'
-import { getDb } from '../data/getDb.js'
+import { insertInventory, getInventory } from '../data/inventory.js'
 
 const CREATE_INVENTORY = 'createinventory'
 
@@ -24,9 +23,9 @@ const createInventoryDefinition = {
     type: 1,
 }
 
-const createInventory = (data, userId, res) => {
+const createInventory = async(data, userId, res) => {
     const name = data.options[0].value
-    if (getInventory(userId, name)) {
+    if (await getInventory(userId, name)) {
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
@@ -35,15 +34,7 @@ const createInventory = (data, userId, res) => {
         })
     }
 
-    getDb().inventories[name] = {
-        name,
-        userId,
-        items: [],
-    }
-
-    console.log(JSON.stringify(getDb()))
-    getDb().activeInventories[userId] = name
-    console.log(JSON.stringify(getDb()))
+    await insertInventory(userId, name, data.options[1]?.value ?? false);
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

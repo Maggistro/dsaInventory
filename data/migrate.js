@@ -8,11 +8,11 @@ open({
 }).then(async db => {
     const migrations = JSON.parse(fs.readFileSync('data/migrations.json'));
 
-    await db.run("CREATE TABLE IF NOT EXISTS migrations (id varchar(255), date int)");
+    await db.run("CREATE TABLE IF NOT EXISTS migrations (id int, date int)");
     const migrationList = await db.all("SELECT * FROM migrations ORDER BY id ASC");
 
-    for(let migrationId=0; migrationId<Object.keys(migrations).length; migrationId++) {
-        if (migrationList.find(row => row.id === migrationId)) {
+    for(let migrationId=0; migrationId < Object.keys(migrations).length; migrationId++) {
+        if (migrationList.find(row => row.id === migrationId) !== undefined) {
             continue;
         }
 

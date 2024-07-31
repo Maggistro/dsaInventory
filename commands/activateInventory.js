@@ -1,6 +1,6 @@
 import { InteractionResponseType } from 'discord-interactions'
-import { getDb } from '../data/getDb.js'
 import { getInventory } from '../data/getInventory.js'
+import { switchInventory } from '../data/inventory.js'
 
 const ACTIVATE_INVENTORY = 'activateinventory'
 
@@ -18,11 +18,11 @@ const activateInventoryDefinition = {
     type: 1,
 }
 
-const activateInventory = (data, userId, res) => {
-    const inventory = getInventory(userId, data.options[0].value)
+const activateInventory = async (data, userId, res) => {
+    const inventory = await getInventory(userId, data.options[0].value)
 
     if (inventory) {
-        getDb().activeInventories[userId] = data.options[0].value
+        await switchInventory(userId, data.options[0].value)
 
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

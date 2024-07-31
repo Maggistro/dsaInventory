@@ -9,8 +9,8 @@ const listInventoriesDefinition = {
     type: 1,
 }
 
-const listInventories = (data, userId, res) => {
-    const list = Object.values(getAllInventories())
+const listInventories = async (data, userId, res) => {
+    const list = await getAllInventories()
         .filter((inventory) => inventory.userId === userId || inventory.shared)
         .reduce(
             (list, inventory) => list + inventory.name + '\n',

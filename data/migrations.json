@@ -7,5 +7,13 @@
         "down": [
             "DROP TABLE item; DROP TABLE inventory"
         ]
+    },
+    "1": {
+        "up": [
+            "ALTER TABLE inventory ADD shared int DEFAULT 0;"
+        ],
+        "down": [
+            "ALTER TABLE inventory DROP COLUMN shared;"
+        ]
     }
 }
