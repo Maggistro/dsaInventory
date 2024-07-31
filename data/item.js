@@ -11,3 +11,7 @@ export const updateItem = async (id, count, weight) => {
 export const removeItemByName = async (inventoryId, name) => {
     return getDb().run(`DELETE FROM item WHERE inventory = ${inventoryId} AND name = ${name}`);
 }
+
+export const getItem = async (inventoryId, name) => {
+    return getDb().get(`SELECT * FROM item WHERE inventory = ${inventoryId} AND name = ${name}`);
+}

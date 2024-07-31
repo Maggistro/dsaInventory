@@ -1,19 +1,15 @@
 import fs from 'fs';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import { jest } from '@jest/globals'
 
+
+export default async () => {
 fs.rmSync('test/testDb.sqlite');
 
 const db = await open({
     filename: 'test/testDb.sqlite',
     driver: sqlite3.Database,
 })
-
-jest.unstable_mockModule('../data/getDb.js', () => ({
-    __esModule: true,
-    getDb: () => db
-}));
 
 const migrations = JSON.parse(fs.readFileSync('data/migrations.json'));
 
@@ -28,3 +24,4 @@ for (let migrationId = 0; migrationId < Object.keys(migrations).length; migratio
 
 const sqlInstructions = fs.readFileSync('test/fixtures.sql', 'utf-8');
 await db.exec(sqlInstructions);
+}
