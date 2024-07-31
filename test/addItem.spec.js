@@ -16,7 +16,7 @@ describe('items', () => {
         'user1', 
         res);
 
-        expect(getItemByName(2, "new-item")).not.toBeNull();
+        expect(await getItemByName(2, "new-item")).toBeTruthy();
     });
     
     it('should add a new item to shared inventory', async () => {
@@ -30,7 +30,7 @@ describe('items', () => {
         'user1', 
         res);
 
-        expect(getItemByName(3, "new-item-shared")).not.toBeNull();
+        expect(await getItemByName(3, "new-item-shared")).toBeTruthy();
     });
     
     it('should update an item', async () => {
