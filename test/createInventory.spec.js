@@ -39,7 +39,7 @@ describe('items', () => {
             res
         )
     })
-    
+
     it('should add a new shared inventory and NOT activate it', async () => {
         const res = { send: jest.fn() }
         await handleRequest(

@@ -18,14 +18,14 @@ const deleteInventoryDefinition = {
 }
 
 const deleteInventory = async (data, userId, res) => {
-    const inventory = await getInventory(userId, data.options[0]?.value);
+    const inventory = await getInventory(userId, data.options[0]?.value)
     if (!inventory.shared && inventory.userId !== userId) {
-        return res.send({ 
+        return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-                error: 'Inventar gehört anderem Nutzer'
-            }
-        });
+                error: 'Inventar gehört anderem Nutzer',
+            },
+        })
     }
 
     await removeInventory(userId, data.options[0]?.value)

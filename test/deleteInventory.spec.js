@@ -47,7 +47,7 @@ describe('deleteInventory', () => {
     })
 
     it('should not delete an inventory of another user', async () => {
-        const res = { send: jest.fn()}
+        const res = { send: jest.fn() }
         await handleRequest(
             CREATE_INVENTORY,
             {
