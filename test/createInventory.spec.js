@@ -27,7 +27,7 @@ describe('items', () => {
         const oldInventory = await getInventory('user1', 'private-active')
         expect(oldInventory.active).toBe(0)
 
-        // revert for other users
+        // revert for other tests
         await handleRequest(
             ACTIVATE_INVENTORY,
             {
