@@ -6,14 +6,23 @@ import { jest } from '@jest/globals'
 describe('items', () => {
     it('should get all items', async () => {
         const res = {
-            send: (data => {
-                console.log(data);
-                expect(data.flag).toBe(InteractionResponseFlags.EPHEMERAL);
-                expect(data.content).toContain('private-item-active-1');
-                expect(data.content).toContain('private-item-active-2');
-                expect(data.content).toContain('duplicate-item');
+            send: (blob => {
+                expect(blob.data.flags).toBe(InteractionResponseFlags.EPHEMERAL);
+                expect(blob.data.content).toContain('private-item-active-1');
+                expect(blob.data.content).toContain('private-item-active-2');
+                expect(blob.data.content).toContain('duplicate-name');
             })
         }
         await handleRequest(LIST_ITEMS, { options: [] }, 'user1', res);
+    });
+    
+    it('should get all items from inactive inventory', async () => {
+        const res = {
+            send: (blob => {
+                expect(blob.data.flags).toBe(InteractionResponseFlags.EPHEMERAL);
+                expect(blob.data.content).toContain('shared-item');
+            })
+        }
+        await handleRequest(LIST_ITEMS, { options: [{ value: 'shared' }] }, 'user1', res);
     });
 })

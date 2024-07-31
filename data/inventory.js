@@ -9,12 +9,11 @@ export const getInventory = async (userId, name) => {
     // if name was given, ignore userId
     let result = [];
     if (name) {
-        result = await getDb().all(`SELECT * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE invenvory.name = '${name}'`);
+        result = await getDb().all(`SELECT * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE inventory.name = '${name}'`);
     } else {
-        result = await getDb().all(`SELECT * FROM inventory WHERE (userId = '${userId}' AND active = 1)`);
+        result = await getDb().all(`SELECT * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE (userId = '${userId}' AND active = 1)`);
     }
 
-    console.log(getDb().config);
     if (result.length === 0) {
         return null;
     }
