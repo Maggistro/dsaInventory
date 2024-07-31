@@ -1,0 +1,6 @@
+{
+  "setupFiles": [
+    "<rootDir>\\test\\setUp.js"
+  ],
+  "transform": {}
+}

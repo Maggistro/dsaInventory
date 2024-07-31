@@ -1,8 +1,8 @@
 {
     "0": {
         "up": [
-            "CREATE TABLE inventory (id int, name varchar(255), userId varchar(255), active int, PRIMARY KEY (id), CONSTRAINT active_inventory UNIQUE (userId, active));",
-            "CREATE TABLE item (id int, name varchar(255), count int, inventory int, PRIMARY KEY (id), FOREIGN KEY (inventory) REFERENCES inventory(id), CONSTRAINT inventory_item UNIQUE (name, inventory));"
+            "CREATE TABLE inventory (id INTEGER PRIMARY KEY NOT NULL, name varchar(255), userId varchar(255), active int, CONSTRAINT active_inventory UNIQUE (userId, active));",
+            "CREATE TABLE item (id INTEGER PRIMARY KEY NOT NULL, name varchar(255), count int, inventory int, FOREIGN KEY (inventory) REFERENCES inventory(id), CONSTRAINT inventory_item UNIQUE (name, inventory));"
         ],
         "down": [
             "DROP TABLE item; DROP TABLE inventory"

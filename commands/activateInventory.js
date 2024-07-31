@@ -1,5 +1,5 @@
 import { InteractionResponseType } from 'discord-interactions'
-import { getInventory } from '../data/getInventory.js'
+import { getInventory } from '../data/inventory.js'
 import { switchInventory } from '../data/inventory.js'
 
 const ACTIVATE_INVENTORY = 'activateinventory'

@@ -63,7 +63,7 @@ const buildTable = (inventory) => {
 }
 
 const listItems = async (data, userId, res) => {
-    const optionalName = data.options ? data.options[0].value : null
+    const optionalName = data.options ? data.options[0]?.value : null
     let inventory = await getInventory(userId, optionalName)
 
     if (!inventory) {
@@ -80,8 +80,6 @@ const listItems = async (data, userId, res) => {
             .status(404)
             .json({ error: 'Dieses Inventar gehört einem anderen Nutzer' })
     }
-
-    const table = buildTable(inventory)
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

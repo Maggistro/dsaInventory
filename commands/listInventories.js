@@ -1,5 +1,5 @@
 import { InteractionResponseType } from 'discord-interactions'
-import { getAllInventories } from '../data/getAllInventories.js'
+import { getAllInventories } from '../data/inventory.js'
 
 const LIST_INVENTORIES = 'listinventories'
 

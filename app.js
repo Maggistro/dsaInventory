@@ -25,6 +25,7 @@ import {
     ACTIVATE_INVENTORY,
     activateInventory,
 } from './commands/activateInventory.js'
+import { handleRequest } from './handleRequest.js'
 
 // Create an express app
 const app = express()
@@ -63,26 +64,7 @@ app.post(
             const { name } = data
             const userId = req.body.member?.user?.id || req.body.user.id
 
-            switch (name) {
-                case ACTIVATE_INVENTORY:
-                    return activateInventory(req.body.data, userId, res)
-                case ADD_ITEM:
-                    return addItem(req.body.data, userId, res)
-                case CREATE_INVENTORY:
-                    return createInventory(req.body.data, userId, res)
-                case DELETE_INVENTORY:
-                    return deleteInventory(req.body.data, userId, res)
-                case DELETE_ITEM:
-                    return deleteItem(req.body.data, userId, res)
-                case LIST_INVENTORIES:
-                    return listInventories(req.body.data, userId, res)
-                case LIST_ITEMS:
-                    return listItems(req.body.data, userId, res)
-                default:
-                    return res
-                        .status(400)
-                        .json({ error: `${name} ist keine gültige Anweisung` })
-            }
+            return handleRequest(name, req.body.data, userId, res);
         }
 
         console.error('unknown interaction type', type)
