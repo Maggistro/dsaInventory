@@ -23,7 +23,7 @@ const createInventoryDefinition = {
     type: 1,
 }
 
-const createInventory = async(data, userId, res) => {
+const createInventory = async (data, userId, res) => {
     const name = data.options[0].value
     if (await getInventory(userId, name)) {
         return res.send({
@@ -34,7 +34,7 @@ const createInventory = async(data, userId, res) => {
         })
     }
 
-    await insertInventory(userId, name, data.options[1]?.value ?? false);
+    await insertInventory(userId, name, data.options[1]?.value ?? false)
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

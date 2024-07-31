@@ -56,7 +56,6 @@ const addItem = async (data, userId, res) => {
         return deleteItem(data, userId, res)
     }
 
-
     let item = inventory.items.find(
         (item) => item.name === data.options[0].value
     )
@@ -66,14 +65,16 @@ const addItem = async (data, userId, res) => {
             inventory.id,
             data.options[0].value,
             data.options[1].value,
-            data.options[2] ? Number.parseFloat(data.options[2].value) : 0,
+            data.options[2] ? Number.parseFloat(data.options[2].value) : 0
         )
     } else {
         await updateItem(
             item.id,
-            item.count = item.count + data.options[1].value,
-            item.weight = data.options[2] ? Number.parseFloat(data.options[2].value) : item.weight
-        );
+            (item.count = item.count + data.options[1].value),
+            (item.weight = data.options[2]
+                ? Number.parseFloat(data.options[2].value)
+                : item.weight)
+        )
     }
 
     return res.send({

@@ -64,7 +64,7 @@ app.post(
             const { name } = data
             const userId = req.body.member?.user?.id || req.body.user.id
 
-            return handleRequest(name, req.body.data, userId, res);
+            return handleRequest(name, req.body.data, userId, res)
         }
 
         console.error('unknown interaction type', type)

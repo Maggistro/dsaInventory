@@ -1,7 +1,5 @@
 {
-  "setupFiles": [
-    "<rootDir>\\test\\setUpMocks.js"
-  ],
-  "globalSetup": "<rootDir>\\test\\setUp.js",
-  "transform": {}
+    "setupFiles": ["<rootDir>\\test\\setUpMocks.js"],
+    "globalSetup": "<rootDir>\\test\\setUp.js",
+    "transform": {}
 }

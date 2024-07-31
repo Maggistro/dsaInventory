@@ -1,10 +1,22 @@
-import { ACTIVATE_INVENTORY, activateInventory } from "./commands/activateInventory.js"
-import { ADD_ITEM, addItem } from "./commands/addItem.js"
-import { CREATE_INVENTORY, createInventory } from "./commands/createInventory.js"
-import { DELETE_INVENTORY, deleteInventory } from "./commands/deleteInventory.js"
-import { DELETE_ITEM, deleteItem } from "./commands/deleteItem.js"
-import { LIST_INVENTORIES, listInventories } from "./commands/listInventories.js"
-import { LIST_ITEMS, listItems } from "./commands/listItems.js"
+import {
+    ACTIVATE_INVENTORY,
+    activateInventory,
+} from './commands/activateInventory.js'
+import { ADD_ITEM, addItem } from './commands/addItem.js'
+import {
+    CREATE_INVENTORY,
+    createInventory,
+} from './commands/createInventory.js'
+import {
+    DELETE_INVENTORY,
+    deleteInventory,
+} from './commands/deleteInventory.js'
+import { DELETE_ITEM, deleteItem } from './commands/deleteItem.js'
+import {
+    LIST_INVENTORIES,
+    listInventories,
+} from './commands/listInventories.js'
+import { LIST_ITEMS, listItems } from './commands/listItems.js'
 
 export const handleRequest = async (name, data, userId, res) => {
     switch (name) {

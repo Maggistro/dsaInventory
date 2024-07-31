@@ -17,9 +17,8 @@ const deleteInventoryDefinition = {
     type: 1,
 }
 
-const deleteInventory = async (data, userId, res) =>  {
-    
-    await removeInventory(userId, data.options[0]?.value);
+const deleteInventory = async (data, userId, res) => {
+    await removeInventory(userId, data.options[0]?.value)
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

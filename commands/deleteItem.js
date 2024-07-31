@@ -26,7 +26,7 @@ const deleteItemDefinition = {
 
 const deleteItem = async (data, userId, res) => {
     const optionalName = data.options[1] ? data.options[1].value : null
-    let inventory = await getInventory(userId, optionalName);
+    let inventory = await getInventory(userId, optionalName)
 
     if (!inventory) {
         return res.status(404).json({ error: 'Inventar nicht gefunden' })
@@ -38,7 +38,7 @@ const deleteItem = async (data, userId, res) => {
             .json({ error: 'Dieses Inventar gehört einem anderen Nutzer' })
     }
 
-    await removeItemByName(inventory.id, data.options[0].value);
+    await removeItemByName(inventory.id, data.options[0].value)
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
