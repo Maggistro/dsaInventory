@@ -1,24 +1,24 @@
-import { getDb } from './getDb.js'
+import { getDb } from './getDb.js';
 
 export const getAllInventories = async () => {
-    return getDb().all('SELECT * from inventory')
-}
+    return getDb().all('SELECT * from inventory');
+};
 
 export const getInventory = async (userId, name) => {
     // if name was given, ignore userId
-    let result = []
+    let result = [];
     if (name) {
         result = await getDb().all(
-            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE inventory.name = '${name}'`
-        )
+            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE inventory.name = '${name}'`,
+        );
     } else {
         result = await getDb().all(
-            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE (userId = '${userId}' AND active = 1)`
-        )
+            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE (userId = '${userId}' AND active = 1)`,
+        );
     }
 
     if (result.length === 0) {
-        return null
+        return null;
     }
 
     // build js object from result list
@@ -26,7 +26,7 @@ export const getInventory = async (userId, name) => {
         (inventory, entry) => {
             // no related items
             if (entry.id === null) {
-                return inventory
+                return inventory;
             }
 
             inventory.items.push({
@@ -35,9 +35,9 @@ export const getInventory = async (userId, name) => {
                 count: entry.count,
                 weight: entry.weight,
                 inventory: entry.inventory,
-            })
+            });
 
-            return inventory
+            return inventory;
         },
         {
             id: result[0].inv_id,
@@ -46,38 +46,30 @@ export const getInventory = async (userId, name) => {
             active: result[0].active,
             shared: result[0].shared,
             items: [],
-        }
-    )
-}
+        },
+    );
+};
 
 export const switchInventory = async (userId, name) => {
-    await getDb().run(
-        `UPDATE inventory SET active = 0 WHERE (userId = '${userId}' AND active = 1)`
-    )
-    return getDb().run(
-        `UPDATE inventory SET active = 1 WHERE (userId = '${userId}' AND name = '${name}')`
-    )
-}
+    await getDb().run(`UPDATE inventory SET active = 0 WHERE (userId = '${userId}' AND active = 1)`);
+    return getDb().run(`UPDATE inventory SET active = 1 WHERE (userId = '${userId}' AND name = '${name}')`);
+};
 
 export const insertInventory = async (userId, name, shared) => {
     // Creating shared inventory does not switch active
     if (shared) {
         return getDb().run(
-            `INSERT INTO inventory (userId, name, active, shared) VALUES ('${userId}', '${name}', 0, 1)`
-        )
+            `INSERT INTO inventory (userId, name, active, shared) VALUES ('${userId}', '${name}', 0, 1)`,
+        );
     }
 
     // Free old active inventory and attach new one to user
-    await getDb().run(
-        `UPDATE inventory SET active = 0 WHERE (userId = '${userId}' AND active = 1)`
-    )
-    return getDb().run(
-        `INSERT INTO inventory (userId, name, active) VALUES ('${userId}', '${name}', 1)`
-    )
-}
+    await getDb().run(`UPDATE inventory SET active = 0 WHERE (userId = '${userId}' AND active = 1)`);
+    return getDb().run(`INSERT INTO inventory (userId, name, active) VALUES ('${userId}', '${name}', 1)`);
+};
 
 export const removeInventory = async (userId, name) => {
     return getDb().run(
-        `DELETE FROM inventory WHERE (userId = '${userId}' AND name = '${name}') OR (name = '${name}' AND shared = 1)`
-    )
-}
+        `DELETE FROM inventory WHERE (userId = '${userId}' AND name = '${name}') OR (name = '${name}' AND shared = 1)`,
+    );
+};

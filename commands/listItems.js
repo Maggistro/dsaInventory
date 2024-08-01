@@ -1,10 +1,7 @@
-import {
-    InteractionResponseType,
-    InteractionResponseFlags,
-} from 'discord-interactions'
-import { getInventory } from '../data/inventory.js'
+import { InteractionResponseType, InteractionResponseFlags } from 'discord-interactions';
+import { getInventory } from '../data/inventory.js';
 
-const LIST_ITEMS = 'listitems'
+const LIST_ITEMS = 'listitems';
 
 const listItemsDefinition = {
     name: LIST_ITEMS,
@@ -18,23 +15,23 @@ const listItemsDefinition = {
         },
     ],
     type: 1,
-}
+};
 
 const buildTable = (inventory) => {
-    const columnSizes = [8, 6, 7]
+    const columnSizes = [8, 6, 7];
     inventory.items.forEach((item) => {
         if (columnSizes[0] < item.name.length) {
-            columnSizes[0] = item.name.length
+            columnSizes[0] = item.name.length;
         }
 
         if (columnSizes[1] < item.count.toString().length) {
-            columnSizes[1] = item.count.toString().length
+            columnSizes[1] = item.count.toString().length;
         }
 
         if (columnSizes[2] < item.weight.toString().length) {
-            columnSizes[2] = item.weight.toString().length
+            columnSizes[2] = item.weight.toString().length;
         }
-    })
+    });
 
     const header =
         'Itemname'.padEnd(columnSizes[0]) +
@@ -42,7 +39,7 @@ const buildTable = (inventory) => {
         'Anzahl'.padEnd(columnSizes[1]) +
         ' | ' +
         'Gewicht'.padEnd(columnSizes[2]) +
-        '\n'
+        '\n';
 
     return (
         `Inventar ${inventory.name}: \n` +
@@ -56,15 +53,15 @@ const buildTable = (inventory) => {
                 ' | ' +
                 item.weight.toString().padEnd(columnSizes[2]) +
                 '\n',
-            header
+            header,
         ) +
         '```'
-    )
-}
+    );
+};
 
 const listItems = async (data, userId, res) => {
-    const optionalName = data.options ? data.options[0]?.value : null
-    let inventory = await getInventory(userId, optionalName)
+    const optionalName = data.options ? data.options[0]?.value : null;
+    let inventory = await getInventory(userId, optionalName);
 
     if (!inventory) {
         return res.send({
@@ -72,13 +69,11 @@ const listItems = async (data, userId, res) => {
             data: {
                 content: 'Inventar nicht gefunden',
             },
-        })
+        });
     }
 
     if (userId !== inventory.userId && !inventory.shared) {
-        return res
-            .status(404)
-            .json({ error: 'Dieses Inventar gehört einem anderen Nutzer' })
+        return res.status(404).json({ error: 'Dieses Inventar gehört einem anderen Nutzer' });
     }
 
     return res.send({
@@ -87,7 +82,7 @@ const listItems = async (data, userId, res) => {
             flags: InteractionResponseFlags.EPHEMERAL,
             content: buildTable(inventory),
         },
-    })
-}
+    });
+};
 
-export { LIST_ITEMS, listItemsDefinition, listItems }
+export { LIST_ITEMS, listItemsDefinition, listItems };
