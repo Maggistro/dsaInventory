@@ -67,6 +67,7 @@ const listItems = async (data, userId, res) => {
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
+                flags: InteractionResponseFlags.EPHEMERAL,
                 content: 'Inventar nicht gefunden',
             },
         });

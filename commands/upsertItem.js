@@ -1,5 +1,4 @@
-import { InteractionResponseType } from 'discord-interactions';
-import { deleteItem } from './deleteItem.js';
+import { InteractionResponseFlags, InteractionResponseType } from 'discord-interactions';
 import { getInventory } from '../data/inventory.js';
 import { insertItem, suggestItems, updateItem } from '../data/item.js';
 
@@ -18,7 +17,7 @@ const upsertItemDefinition = {
         {
             type: 4,
             name: 'count',
-            description: 'Neue Anzahl der Items',
+            description: 'Anzahl zum herausnehmen/hineinlegen',
             required: true,
         },
         {
@@ -37,27 +36,36 @@ const upsertItemDefinition = {
     type: 1,
 };
 
-
 const upsertItem = async (data, userId, res) => {
     const optionalName = data.options[3] ? data.options[3].value : null;
     let inventory = await getInventory(userId, optionalName);
 
     if (!inventory) {
-        return res.status(404).json({ error: 'Inventar nicht gefunden' });
+        return res.status(404).json({
+            error: 'Inventar nicht gefunden',
+            data: {
+                flags: InteractionResponseFlags.EPHEMERAL,
+            },
+        });
     }
 
     if (userId !== inventory.userId && !inventory.shared) {
-        return res.status(404).json({ error: 'Dieses Inventar gehört einem anderen Nutzer' });
+        return res.status(404).json({
+            error: 'Dieses Inventar gehört einem anderen Nutzer',
+            data: {
+                flags: InteractionResponseFlags.EPHEMERAL,
+            },
+        });
     }
 
-    if (data.options[0].focus && data.options[0].value.length > 1) {
+    if (data.options[0].focused && data.options[0].value.length > 1) {
         const items = await suggestItems(inventory.id, data.options[0].value);
         return res.send({
             type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
             data: {
-                choices: items.map(item => item.name),
-            }
-        })
+                choices: items.map((item) => item.name),
+            },
+        });
     }
 
     let item = inventory.items.find((item) => item.name === data.options[0].value);

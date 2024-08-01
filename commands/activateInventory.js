@@ -32,7 +32,12 @@ const activateInventory = async (data, userId, res) => {
         });
     }
 
-    return res.status(404).json({ error: 'inventar nicht gefunden' });
+    return res.status(404).json({
+        error: 'inventar nicht gefunden',
+        data: {
+            flags: InteractionResponseFlags.EPHEMERAL,
+        },
+    });
 };
 
 export { ACTIVATE_INVENTORY, activateInventoryDefinition, activateInventory };

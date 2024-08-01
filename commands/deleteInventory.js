@@ -1,4 +1,4 @@
-import { InteractionResponseType } from 'discord-interactions';
+import { InteractionResponseFlags, InteractionResponseType } from 'discord-interactions';
 import { getInventory, removeInventory } from '../data/inventory.js';
 
 const DELETE_INVENTORY = 'deleteinventory';
@@ -23,6 +23,7 @@ const deleteInventory = async (data, userId, res) => {
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
+                flags: InteractionResponseFlags.EPHEMERAL,
                 error: 'Inventar gehört anderem Nutzer',
             },
         });

@@ -85,17 +85,14 @@ describe('upsertItem', () => {
         const res = {
             send: (blob) => {
                 expect(blob.type).toBe(InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT),
-                expect(blob.data.choices).toStrictEqual([
-                    'private-item-active-1',
-                    'private-item-active-2'
-                ]);
-            }
+                    expect(blob.data.choices).toStrictEqual(['private-item-active-1', 'private-item-active-2']);
+            },
         };
         await handleRequest(
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'private', focus: true }, //partial name
+                    { value: 'private', focused: true }, //partial name
                 ],
             },
             'user1',

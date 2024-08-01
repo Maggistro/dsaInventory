@@ -1,4 +1,4 @@
-import { InteractionResponseType } from 'discord-interactions';
+import { InteractionResponseFlags, InteractionResponseType } from 'discord-interactions';
 import { getInventory } from '../data/inventory.js';
 import { removeItemByName } from '../data/item.js';
 
@@ -29,11 +29,21 @@ const deleteItem = async (data, userId, res) => {
     let inventory = await getInventory(userId, optionalName);
 
     if (!inventory) {
-        return res.status(404).json({ error: 'Inventar nicht gefunden' });
+        return res.status(404).json({
+            error: 'Inventar nicht gefunden',
+            data: {
+                flags: InteractionResponseFlags.EPHEMERAL,
+            },
+        });
     }
 
     if (userId !== inventory.userId && !inventory.shared) {
-        return res.status(404).json({ error: 'Dieses Inventar gehört einem anderen Nutzer' });
+        return res.status(404).json({
+            error: 'Dieses Inventar gehört einem anderen Nutzer',
+            data: {
+                flags: InteractionResponseFlags.EPHEMERAL,
+            },
+        });
     }
 
     await removeItemByName(inventory.id, data.options[0].value);
