@@ -38,10 +38,8 @@ const upsertItemDefinition = {
 };
 
 const autocomplete = async (data, userId, res) => {
-    console.log(data);
     if (data.options[0] && data.options[0].value.length > 2) {
         const items = await suggestItems(userId, data.options[0].value);
-        console.log(items);
         return res.send({
             type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
             data: {
@@ -57,8 +55,6 @@ const autocomplete = async (data, userId, res) => {
 const upsertItem = async (data, userId, res) => {
     const optionalName = data.options[3] ? data.options[3].value : null;
     let inventory = await getInventory(userId, optionalName);
-    
-    console.log(`found ${inventory?.name}`);
 
     if (!inventory) {
         return res.status(404).json({

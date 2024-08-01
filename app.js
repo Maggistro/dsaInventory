@@ -36,8 +36,6 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         const { name } = data;
         const userId = req.body.member?.user?.id || req.body.user.id;
 
-        console.log(`recieved ${name}`);
-
         return handleRequest(name, req.body.data, userId, res);
     }
 
