@@ -17,3 +17,7 @@ export const removeItemByName = async (inventoryId, name) => {
 export const getItemByName = async (inventoryId, name) => {
     return getDb().get(`SELECT * FROM item WHERE inventory = ${inventoryId} AND name = '${name}'`);
 };
+
+export const suggestItems = async (inventoryId, start) => {
+    return getDb().all(`SELECT * FROM item WHERE inventory = ${inventoryId} AND name LIKE '%${start}%' LIMIT 25`)
+}

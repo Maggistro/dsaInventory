@@ -2,6 +2,8 @@ import { handleRequest } from '../handleRequest.js';
 import { jest } from '@jest/globals';
 import { UPSERT_ITEM } from '../commands/upsertItem.js';
 import { getItemByName } from '../data/item.js';
+import { InteractionResponseType } from 'discord-interactions';
+import { getInventory } from '../data/inventory.js';
 
 describe('upsertItem', () => {
     it('should add a new item to active inventory', async () => {
@@ -76,5 +78,31 @@ describe('upsertItem', () => {
         item = await getItemByName(2, 'updated-item');
         expect(item.count).toBe(5);
         expect(item.weight).toBe(2);
+    });
+
+    it('should suggest items', async () => {
+        const currentState = await getInventory('user1');
+        const res = {
+            send: (blob) => {
+                expect(blob.type).toBe(InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT),
+                expect(blob.data.choices).toStrictEqual([
+                    'private-item-active-1',
+                    'private-item-active-2'
+                ]);
+            }
+        };
+        await handleRequest(
+            UPSERT_ITEM,
+            {
+                options: [
+                    { value: 'private', focus: true }, //partial name
+                ],
+            },
+            'user1',
+            res,
+        );
+
+        // no changes, just suggest
+        expect(currentState).toStrictEqual(await getInventory('user1'));
     });
 });

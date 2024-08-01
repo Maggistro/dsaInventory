@@ -1,7 +1,7 @@
 import { InteractionResponseType } from 'discord-interactions';
 import { deleteItem } from './deleteItem.js';
 import { getInventory } from '../data/inventory.js';
-import { insertItem, updateItem } from '../data/item.js';
+import { insertItem, suggestItems, updateItem } from '../data/item.js';
 
 const UPSERT_ITEM = 'upsertitem';
 
@@ -37,6 +37,7 @@ const upsertItemDefinition = {
     type: 1,
 };
 
+
 const upsertItem = async (data, userId, res) => {
     const optionalName = data.options[3] ? data.options[3].value : null;
     let inventory = await getInventory(userId, optionalName);
@@ -49,9 +50,14 @@ const upsertItem = async (data, userId, res) => {
         return res.status(404).json({ error: 'Dieses Inventar gehört einem anderen Nutzer' });
     }
 
-    if (data.options[1].value === 0) {
-        data.options[1] = data.options[2];
-        return deleteItem(data, userId, res);
+    if (data.options[0].focus && data.options[0].value.length > 1) {
+        const items = await suggestItems(inventory.id, data.options[0].value);
+        return res.send({
+            type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
+            data: {
+                choices: items.map(item => item.name),
+            }
+        })
     }
 
     let item = inventory.items.find((item) => item.name === data.options[0].value);
