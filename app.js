@@ -47,7 +47,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
 
         switch (name) {
             case UPSERT_ITEM:
-                return autocomplete(userId, data.options[0], res);
+                return autocomplete(data, userId, res);
         }
     }
 

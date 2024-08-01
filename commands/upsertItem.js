@@ -38,13 +38,20 @@ const upsertItemDefinition = {
 };
 
 const autocomplete = async (data, userId, res) => {
-    const items = await suggestItems(userId, data.options[0].value);
-    return res.send({
-        type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
-        data: {
-            choices: items.map((item) => item.name),
-        },
-    });
+    console.log(data);
+    if (data.options[0] && data.options[0].value.length > 2) {
+        const items = await suggestItems(userId, data.options[0].value);
+        console.log(items);
+        return res.send({
+            type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
+            data: {
+                choices: items.map((item) => ({
+                    value: item.name,
+                    name: item.name
+                })),
+            },
+        });
+    }
 }
 
 const upsertItem = async (data, userId, res) => {
@@ -91,7 +98,7 @@ const upsertItem = async (data, userId, res) => {
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-            content: `Item ${data.options[0].value} mit Anzahl ${data.options[1].value} aktualisiert`,
+            content: `Anzahl Item ${data.options[0].value} um ${data.options[1].value} aktualisiert`,
         },
     });
 };
