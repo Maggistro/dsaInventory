@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { InstallGlobalCommands } from '../utils.js';
-import { upsertItemDefinition } from './addItem.js';
+import { upsertItemDefinition } from './upsertItem.js';
 import { createInventoryDefinition } from './createInventory.js';
 import { deleteItemDefinition } from './deleteItem.js';
 import { listItemsDefinition } from './listItems.js';
