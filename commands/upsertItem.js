@@ -13,6 +13,7 @@ const upsertItemDefinition = {
             name: 'item',
             description: 'Itemname',
             required: true,
+            autocomplete: true
         },
         {
             type: 4,
@@ -36,9 +37,21 @@ const upsertItemDefinition = {
     type: 1,
 };
 
+const autocomplete = async (data, userId, res) => {
+    const items = await suggestItems(userId, data.options[0].value);
+    return res.send({
+        type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
+        data: {
+            choices: items.map((item) => item.name),
+        },
+    });
+}
+
 const upsertItem = async (data, userId, res) => {
     const optionalName = data.options[3] ? data.options[3].value : null;
     let inventory = await getInventory(userId, optionalName);
+    
+    console.log(`found ${inventory?.name}`);
 
     if (!inventory) {
         return res.status(404).json({
@@ -54,16 +67,6 @@ const upsertItem = async (data, userId, res) => {
             error: 'Dieses Inventar gehört einem anderen Nutzer',
             data: {
                 flags: InteractionResponseFlags.EPHEMERAL,
-            },
-        });
-    }
-
-    if (data.options[0].focused && data.options[0].value.length > 1) {
-        const items = await suggestItems(inventory.id, data.options[0].value);
-        return res.send({
-            type: InteractionResponseType.APPLICATION_COMMAND_AUTOCOMPLETE_RESULT,
-            data: {
-                choices: items.map((item) => item.name),
             },
         });
     }
@@ -93,4 +96,4 @@ const upsertItem = async (data, userId, res) => {
     });
 };
 
-export { UPSERT_ITEM, upsertItemDefinition, upsertItem };
+export { UPSERT_ITEM, upsertItemDefinition, upsertItem, autocomplete };

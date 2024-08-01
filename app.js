@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import { InteractionType, InteractionResponseType, verifyKeyMiddleware } from 'discord-interactions';
 import { handleRequest } from './handleRequest.js';
+import { autocomplete, UPSERT_ITEM } from './commands/upsertItem.js';
 
 // Create an express app
 const app = express();
@@ -35,7 +36,19 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         const { name } = data;
         const userId = req.body.member?.user?.id || req.body.user.id;
 
+        console.log(`recieved ${name}`);
+
         return handleRequest(name, req.body.data, userId, res);
+    }
+
+    if (type === InteractionType.APPLICATION_COMMAND_AUTOCOMPLETE) {
+        const { name } = data;
+        const userId = req.body.member?.user?.id || req.body.user.id;
+
+        switch (name) {
+            case UPSERT_ITEM:
+                return autocomplete(userId, data.options[0], res);
+        }
     }
 
     console.error('unknown interaction type', type);

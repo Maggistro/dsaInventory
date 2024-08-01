@@ -18,6 +18,6 @@ export const getItemByName = async (inventoryId, name) => {
     return getDb().get(`SELECT * FROM item WHERE inventory = ${inventoryId} AND name = '${name}'`);
 };
 
-export const suggestItems = async (inventoryId, start) => {
-    return getDb().all(`SELECT * FROM item WHERE inventory = ${inventoryId} AND name LIKE '%${start}%' LIMIT 25`);
+export const suggestItems = async (userId, start) => {
+    return getDb().all(`SELECT * FROM item INNER JOIN inventory ON inventory.id = item.inventory WHERE userId = ${userId} AND item.name LIKE '%${start}%' LIMIT 25`);
 };
