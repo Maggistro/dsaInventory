@@ -1,6 +1,7 @@
 import { InteractionResponseFlags, InteractionResponseType } from 'discord-interactions';
 import { getInventory } from '../data/inventory.js';
 import { insertItem, suggestItems, updateItem } from '../data/item.js';
+import { getOptionByName, OPTIONS } from '../utils.js';
 
 const UPSERT_ITEM = 'upsertitem';
 
@@ -10,26 +11,26 @@ const upsertItemDefinition = {
     options: [
         {
             type: 3,
-            name: 'item',
+            name: OPTIONS.ITEM,
             description: 'Itemname',
             required: true,
             autocomplete: true
         },
         {
             type: 4,
-            name: 'count',
+            name: OPTIONS.COUNT,
             description: 'Anzahl zum herausnehmen/hineinlegen',
             required: true,
         },
         {
             type: 3,
-            name: 'weight',
+            name: OPTIONS.WEIGHT,
             description: 'Gewicht einer Einheit',
             required: false,
         },
         {
             type: 3,
-            name: 'inventory',
+            name: OPTIONS.INVENTORY,
             description: 'Alternatives Inventar',
             required: false,
         },
@@ -53,7 +54,7 @@ const autocomplete = async (data, userId, res) => {
 }
 
 const upsertItem = async (data, userId, res) => {
-    const optionalName = data.options[3] ? data.options[3].value : null;
+    const optionalName = getOptionByName(data.options, OPTIONS.INVENTORY);
     let inventory = await getInventory(userId, optionalName);
 
     if (!inventory) {
@@ -74,27 +75,27 @@ const upsertItem = async (data, userId, res) => {
         });
     }
 
-    let item = inventory.items.find((item) => item.name === data.options[0].value);
+    let item = inventory.items.find((item) => item.name === getOptionByName(data.options, OPTIONS.NAME));
 
     if (!item) {
         await insertItem(
             inventory.id,
-            data.options[0].value,
-            data.options[1].value,
-            data.options[2] ? Number.parseFloat(data.options[2].value) : 0,
+            getOptionByName(data.options, OPTIONS.NAME),
+            getOptionByName(data.options, OPTIONS.COUNT),
+            Number.parseFloat(getOptionByName(data.options, OPTIONS.WEIGHT) ?? 0),
         );
     } else {
         await updateItem(
             item.id,
-            (item.count = item.count + data.options[1].value),
-            (item.weight = data.options[2] ? Number.parseFloat(data.options[2].value) : item.weight),
+            (item.count = item.count + getOptionByName(data.options, OPTIONS.COUNT)),
+            (item.weight = Number.parseFloat(getOptionByName(data.options, OPTIONS.WEIGHT) ?? item.weight)),
         );
     }
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-            content: `Anzahl Item ${data.options[0].value} um ${data.options[1].value} aktualisiert`,
+            content: `Anzahl Item ${getOptionByName(data.options, OPTIONS.NAME)} um ${getOptionByName(data.options, OPTIONS.COUNT)} aktualisiert`,
         },
     });
 };

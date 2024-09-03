@@ -39,3 +39,24 @@ export async function InstallGlobalCommands(appId, commands) {
 export function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+export const OPTIONS = {
+    NAME: 'name',
+    INVENTORY: 'inventory',
+    WEIGHT: 'weight',
+    COUNT: 'count',
+    ITEM: 'item'   
+}
+
+export function getOptionByName(options, name){
+    if (!options) {
+        return null;
+    }
+    const entry = options.filter(option => option.name === name);
+
+    if (entry.length > 0) {
+        return entry[0].value;
+    }
+
+    return null;
+}
