@@ -1,6 +1,7 @@
 import { InteractionResponseFlags, InteractionResponseType } from 'discord-interactions';
 import { getInventory } from '../data/inventory.js';
 import { removeItemByName } from '../data/item.js';
+import { getOptionByName, OPTIONS } from '../utils.js';
 
 const DELETE_ITEM = 'deleteitem';
 
@@ -25,7 +26,7 @@ const deleteItemDefinition = {
 };
 
 const deleteItem = async (data, userId, res) => {
-    const optionalName = data.options[1] ? data.options[1].value : null;
+    const optionalName = getOptionByName(data.options, OPTIONS.INVENTORY);
     let inventory = await getInventory(userId, optionalName);
 
     if (!inventory) {
@@ -46,12 +47,12 @@ const deleteItem = async (data, userId, res) => {
         });
     }
 
-    await removeItemByName(inventory.id, data.options[0].value);
+    await removeItemByName(inventory.id, getOptionByName(data.options, OPTIONS.ITEM));
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-            content: `Item ${data.options[0].value} gelöscht`,
+            content: `Item ${getOptionByName(data.options, OPTIONS.ITEM)} gelöscht`,
         },
     });
 };

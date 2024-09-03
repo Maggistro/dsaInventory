@@ -11,9 +11,9 @@ describe('deleteItem', () => {
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'delete-item' }, //name
-                    { value: 2 }, //count
-                    { value: 1.5 }, //weight
+                    { value: 'delete-item', name: 'item' }, //name
+                    { value: 2, name: 'count' }, //count
+                    { value: 1.5, name: 'weight' }, //weight
                 ],
             },
             'user1',
@@ -25,7 +25,7 @@ describe('deleteItem', () => {
             DELETE_ITEM,
             {
                 options: [
-                    { value: 'delete-item' }, //name
+                    { value: 'delete-item', name: 'item' }, //name
                 ],
             },
             'user1',
@@ -41,10 +41,10 @@ describe('deleteItem', () => {
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'delete-item' }, //name
-                    { value: 2 }, //count
-                    { value: 1.5 }, //weight
-                    { value: 'shared' }, //inventory
+                    { value: 'delete-item', name: 'item' }, //name
+                    { value: 2, name: 'count' }, //count
+                    { value: 1.5, name: 'weight' }, //weight
+                    { value: 'shared', name: 'inventory' }, //inventory
                 ],
             },
             'user1',
@@ -56,8 +56,40 @@ describe('deleteItem', () => {
             DELETE_ITEM,
             {
                 options: [
-                    { value: 'delete-item' }, //name
-                    { value: 'shared' }, //inventory
+                    { value: 'delete-item', name: 'item' }, //name
+                    { value: 'shared', name: 'inventory' }, //inventory
+                ],
+            },
+            'user1',
+            res,
+        );
+
+        expect(await getItemByName(3, 'delete-item')).not.toBeTruthy();
+    });
+
+    it('should delete an item from shared inventory', async () => {
+        const res = { send: jest.fn() };
+        await handleRequest(
+            UPSERT_ITEM,
+            {
+                options: [
+                    { value: 'delete-item', name: 'item' }, //name
+                    { value: 2, name: 'count' }, //count
+                    { value: 'shared', name: 'inventory' }, //inventory
+                    { value: 1.5, name: 'weight' }, //weight
+                ],
+            },
+            'user1',
+            res,
+        );
+
+        expect(await getItemByName(3, 'delete-item')).toBeTruthy();
+        await handleRequest(
+            DELETE_ITEM,
+            {
+                options: [
+                    { value: 'delete-item', name: 'item' }, //item
+                    { value: 'shared', name: 'inventory' }, //inventory
                 ],
             },
             'user1',

@@ -1,5 +1,6 @@
 import { InteractionResponseFlags, InteractionResponseType } from 'discord-interactions';
 import { getInventory, removeInventory } from '../data/inventory.js';
+import { getOptionByName, OPTIONS } from '../utils.js';
 
 const DELETE_INVENTORY = 'deleteinventory';
 
@@ -18,7 +19,7 @@ const deleteInventoryDefinition = {
 };
 
 const deleteInventory = async (data, userId, res) => {
-    const inventory = await getInventory(userId, data.options[0]?.value);
+    const inventory = await getInventory(userId, getOptionByName(data.options, OPTIONS.INVENTORY));
     if (!inventory.shared && inventory.userId !== userId) {
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -29,7 +30,7 @@ const deleteInventory = async (data, userId, res) => {
         });
     }
 
-    await removeInventory(userId, data.options[0]?.value);
+    await removeInventory(userId, getOptionByName(data.options, OPTIONS.INVENTORY));
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {

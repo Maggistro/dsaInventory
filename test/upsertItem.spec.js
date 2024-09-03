@@ -11,7 +11,7 @@ describe('upsertItem', () => {
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'new-item', name: 'name' }, //name
+                    { value: 'new-item', name: 'item' }, //name
                     { value: 2, name: 'count' }, //count
                     { value: 1.5, name: 'weight' }, //weight
                 ],
@@ -29,7 +29,7 @@ describe('upsertItem', () => {
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'new-item-shared', name: 'name' }, //name
+                    { value: 'new-item-shared', name: 'item' }, //name
                     { value: 2, name: 'count' }, //count
                     { value: 'shared', name: 'inventory' }, //inventory
                     { value: 1.5, name: 'weight' } //weight
@@ -48,7 +48,7 @@ describe('upsertItem', () => {
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'new-item-shared', name: 'name' }, //name
+                    { value: 'new-item-shared', name: 'item' }, //name
                     { value: 2, name: 'count' }, //count
                     { value: 1.5, name: 'weight' }, //weight
                     { value: 'shared', name: 'inventory' }, //inventory
@@ -67,7 +67,7 @@ describe('upsertItem', () => {
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'updated-item', name: 'name' }, //name
+                    { value: 'updated-item', name: 'item' }, //name
                     { value: 2, name: 'count' }, //count
                     { value: 1.5, name: 'weight' }, //weight
                 ],
@@ -84,7 +84,7 @@ describe('upsertItem', () => {
             UPSERT_ITEM,
             {
                 options: [
-                    { value: 'updated-item', name: 'name' }, //name
+                    { value: 'updated-item', name: 'item' }, //name
                     { value: 3, name: 'count' }, //count
                     { value: 2, name: 'weight' }, //weight
                 ],
@@ -116,7 +116,7 @@ describe('upsertItem', () => {
         await autocomplete(
             {
                 options: [
-                    { value: 'private', name: 'name' }, //name
+                    { value: 'private', name: 'item' }, //name
                 ],
             },
             'user1',

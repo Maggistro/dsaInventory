@@ -1,5 +1,6 @@
 import { InteractionResponseType } from 'discord-interactions';
 import { insertInventory, getInventory } from '../data/inventory.js';
+import { getOptionByName, OPTIONS } from '../utils.js';
 
 const CREATE_INVENTORY = 'createinventory';
 
@@ -9,7 +10,7 @@ const createInventoryDefinition = {
     options: [
         {
             type: 3,
-            name: 'name',
+            name: 'inventory',
             description: 'Inventar Name',
             required: true,
         },
@@ -24,7 +25,7 @@ const createInventoryDefinition = {
 };
 
 const createInventory = async (data, userId, res) => {
-    const name = data.options[0].value;
+    const name = getOptionByName(data.options, OPTIONS.INVENTORY);
     if (await getInventory(userId, name)) {
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -34,7 +35,7 @@ const createInventory = async (data, userId, res) => {
         });
     }
 
-    await insertInventory(userId, name, data.options[1]?.value ?? false);
+    await insertInventory(userId, name, getOptionByName(data.options, OPTIONS.SHARED) ?? false);
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

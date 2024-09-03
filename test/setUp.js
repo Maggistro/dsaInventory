@@ -3,7 +3,7 @@ import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
 export default async () => {
-    fs.rmSync('test/testDb.sqlite');
+    fs.rmSync('test/testDb.sqlite', { force: true });
 
     const db = await open({
         filename: 'test/testDb.sqlite',

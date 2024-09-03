@@ -75,12 +75,12 @@ const upsertItem = async (data, userId, res) => {
         });
     }
 
-    let item = inventory.items.find((item) => item.name === getOptionByName(data.options, OPTIONS.NAME));
+    let item = inventory.items.find((item) => item.name === getOptionByName(data.options, OPTIONS.ITEM));
 
     if (!item) {
         await insertItem(
             inventory.id,
-            getOptionByName(data.options, OPTIONS.NAME),
+            getOptionByName(data.options, OPTIONS.ITEM),
             getOptionByName(data.options, OPTIONS.COUNT),
             Number.parseFloat(getOptionByName(data.options, OPTIONS.WEIGHT) ?? 0),
         );
@@ -95,7 +95,7 @@ const upsertItem = async (data, userId, res) => {
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-            content: `Anzahl Item ${getOptionByName(data.options, OPTIONS.NAME)} um ${getOptionByName(data.options, OPTIONS.COUNT)} aktualisiert`,
+            content: `Anzahl Item ${getOptionByName(data.options, OPTIONS.ITEM)} um ${getOptionByName(data.options, OPTIONS.COUNT)} aktualisiert`,
         },
     });
 };

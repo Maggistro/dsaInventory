@@ -11,7 +11,7 @@ describe('createInventory', () => {
             CREATE_INVENTORY,
             {
                 options: [
-                    { value: 'new-inventory' }, //name
+                    { value: 'new-inventory', name: 'inventory' }, //name
                 ],
             },
             'user1',
@@ -32,7 +32,7 @@ describe('createInventory', () => {
             ACTIVATE_INVENTORY,
             {
                 options: [
-                    { value: 'private-active' }, //name
+                    { value: 'private-active', name: 'inventory' }, //name
                 ],
             },
             'user1',
@@ -46,8 +46,8 @@ describe('createInventory', () => {
             CREATE_INVENTORY,
             {
                 options: [
-                    { value: 'new-shared-inventory' }, //name
-                    { value: 1 }, //shared
+                    { value: 'new-shared-inventory', name: 'inventory' }, //name
+                    { value: 1, name: 'shared' }, //shared
                 ],
             },
             'user1',

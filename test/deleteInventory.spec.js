@@ -12,7 +12,7 @@ describe('deleteInventory', () => {
             CREATE_INVENTORY,
             {
                 options: [
-                    { value: 'delete-inventory' }, //name
+                    { value: 'delete-inventory', name: 'inventory' }, //name
                 ],
             },
             'user1',
@@ -24,7 +24,7 @@ describe('deleteInventory', () => {
             DELETE_INVENTORY,
             {
                 options: [
-                    { value: 'delete-inventory' }, //name
+                    { value: 'delete-inventory', name: 'inventory' }, //name
                 ],
             },
             'user1',
@@ -38,7 +38,7 @@ describe('deleteInventory', () => {
             ACTIVATE_INVENTORY,
             {
                 options: [
-                    { value: 'private-active' }, //name
+                    { value: 'private-active', name: 'inventory' }, //name
                 ],
             },
             'user1',
@@ -52,7 +52,7 @@ describe('deleteInventory', () => {
             CREATE_INVENTORY,
             {
                 options: [
-                    { value: 'delete-inventory' }, //name
+                    { value: 'delete-inventory', name: 'inventory' }, //name
                 ],
             },
             'user2',
@@ -64,7 +64,7 @@ describe('deleteInventory', () => {
             DELETE_INVENTORY,
             {
                 options: [
-                    { value: 'delete-inventory' }, //name
+                    { value: 'delete-inventory', name: 'inventory' }, //name
                 ],
             },
             'user1',

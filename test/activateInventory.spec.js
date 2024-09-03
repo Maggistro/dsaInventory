@@ -10,7 +10,7 @@ describe('activateInventory', () => {
             ACTIVATE_INVENTORY,
             {
                 options: [
-                    { value: 'private-inactive' }, //name
+                    { value: 'private-inactive', name: 'inventory' }, //name
                 ],
             },
             'user1',
@@ -28,7 +28,7 @@ describe('activateInventory', () => {
             ACTIVATE_INVENTORY,
             {
                 options: [
-                    { value: 'private-active' }, //name
+                    { value: 'private-active', name: 'inventory' }, //name
                 ],
             },
             'user1',

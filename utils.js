@@ -41,11 +41,11 @@ export function capitalize(str) {
 }
 
 export const OPTIONS = {
-    NAME: 'name',
     INVENTORY: 'inventory',
     WEIGHT: 'weight',
     COUNT: 'count',
-    ITEM: 'item'   
+    ITEM: 'item',
+    SHARED: 'shared'
 }
 
 export function getOptionByName(options, name){

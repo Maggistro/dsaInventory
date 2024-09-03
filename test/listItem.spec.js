@@ -22,6 +22,6 @@ describe('listItem', () => {
                 expect(blob.data.content).toContain('shared-item');
             },
         };
-        await handleRequest(LIST_ITEMS, { options: [{ value: 'shared' }] }, 'user1', res);
+        await handleRequest(LIST_ITEMS, { options: [{ value: 'shared', name: 'inventory' }] }, 'user1', res);
     });
 });
