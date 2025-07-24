@@ -3,9 +3,9 @@ import { getInventory } from '../data/inventory.js';
 import { buildTable } from '../format/buildTable.js';
 import { ITEM_LIMIT } from './listItems.js';
 
-const NEXT_PAGE = 'nextpage';
+const PREVIOUS_PAGE = 'previouspage';
 
-const nextPage = async (reactionId, res) => {
+const previousPage = async (reactionId, res) => {
     const [_, inventoryId, offset] = reactionId.split(':');
     
     if (!inventoryId) {
@@ -59,4 +59,4 @@ const nextPage = async (reactionId, res) => {
     });
 };
 
-export { NEXT_PAGE, nextPage };
+export { PREVIOUS_PAGE, previousPage };
