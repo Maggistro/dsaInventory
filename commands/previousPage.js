@@ -25,30 +25,23 @@ const previousPage = async (reactionId, res) => {
     var components = [];
     if (parseInt(offset) > 0) {
         components.push({
-            type: 1,
-            components: [
-            {
-                type: 2, // Button
-                style: 2, // Secondary style
-                emoji: {        
-                    name: '⬅️'
-                },
-                custom_id: `${PREVIOUS_PAGE}:${inventory.name}:${parseInt(offset) - ITEM_LIMIT}`,
-                label: 'Zurück'
-            }]
+            type: 2, // Button
+            style: 2, // Secondary style
+            emoji: {        
+                name: '⬅️'
+            },
+            custom_id: `${PREVIOUS_PAGE}:${inventory.name}:${parseInt(offset) - ITEM_LIMIT}`,
+            label: 'Zurück'
         });
     }
     components.push({
-        type: 1,
-        components: [{
-            type: 2, // Button
-            style: 2, // Secondary style
-            emoji: {
-                name: '➡️'
-            },
-            custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
-            label: 'Weiter'
-        }]
+        type: 2, // Button
+        style: 2, // Secondary style
+        emoji: {
+            name: '➡️'
+        },
+        custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
+        label: 'Weiter'
     });
     return res.send({
         type: InteractionResponseType.UPDATE_MESSAGE,
