@@ -1,6 +1,6 @@
 const buildTable = (inventory, offset, limit) => {
     const columnSizes = [8, 6, 7];
-    const items = inventory.items.slice(offset, limit);
+    const items = inventory.items.slice(offset, limit + offset);
     items.forEach((item) => {
         if (columnSizes[0] < item.name.length) {
             columnSizes[0] = item.name.length;
