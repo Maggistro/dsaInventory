@@ -22,10 +22,16 @@ const listItemsDefinition = {
 
 
 const listItems = async (data, userId, res, offset = 0, limit = ITEM_LIMIT) => {
+    console.log('listItems called with userId:', userId, 'offset:', offset);
+    const startTime = Date.now();
+    
     const optionalName = getOptionByName(data.options, OPTIONS.INVENTORY);
     let inventory = await getInventory(userId, optionalName, offset, limit);
+    
+    console.log('getInventory took:', Date.now() - startTime, 'ms');
 
     if (!inventory) {
+        console.log('No inventory found for user:', userId, 'name:', optionalName);
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
@@ -36,21 +42,18 @@ const listItems = async (data, userId, res, offset = 0, limit = ITEM_LIMIT) => {
     }
 
     if (userId !== inventory.userId && !inventory.shared) {
+        console.log('User', userId, 'tried to access inventory owned by', inventory.userId);
         return res.status(404).json({ error: 'Dieses Inventar gehört einem anderen Nutzer' });
     }
 
+    const content = buildTable(inventory);
+    console.log('Table content length:', content.length);
+    
+    if (content.length > 1900) {
+        console.warn('Content length exceeds safe limit:', content.length);
+    }
+
     var components = [];
-    if (offset > 0) {
-        components.push({
-            type: 2, // Button
-            style: 2, // Secondary style
-            emoji: {        
-                name: '⬅️'
-            },
-            custom_id: `inventory_prev_page:${inventory.id}:${offset}`,
-            label: 'Zurück'
-        });
-    }   
     if (inventory.items.length > limit + offset) {
         components.push({
             type: 2, // Button
@@ -67,13 +70,13 @@ const listItems = async (data, userId, res, offset = 0, limit = ITEM_LIMIT) => {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
             flags: InteractionResponseFlags.EPHEMERAL,
-            content: buildTable(inventory),
-            components: [
+            content: content,
+            components: components.length > 0 ? [
                 {
                     type: 1, // Action Row
                     components
                 }
-            ]
+            ] : []
         },
     });
 };
