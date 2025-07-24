@@ -2,6 +2,7 @@ import { InteractionResponseType, InteractionResponseFlags } from 'discord-inter
 import { getInventory } from '../data/inventory.js';
 import { buildTable } from '../format/buildTable.js';
 import { ITEM_LIMIT } from './listItems.js';
+import { NEXT_PAGE } from './nextPage.js';
 
 const PREVIOUS_PAGE = 'previouspage';
 
