@@ -58,7 +58,7 @@ const listItems = async (data, userId, res) => {
             emoji: {
                 name: '➡️'
             },
-            custom_id: `${NEXT_PAGE}:${inventory.id}:${ITEM_LIMIT}`,
+            custom_id: `${NEXT_PAGE}:${inventory.name}:${ITEM_LIMIT}`,
             label: 'Weiter'
         });
     }

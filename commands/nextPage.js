@@ -30,7 +30,7 @@ const nextPage = async (reactionId, res) => {
             emoji: {        
                 name: '⬅️'
             },
-            custom_id: `${PREVIOUS_PAGE}:${inventory.id}:${parseInt(offset) - ITEM_LIMIT}`,
+            custom_id: `${PREVIOUS_PAGE}:${inventory.name}:${parseInt(offset) - ITEM_LIMIT}`,
             label: 'Zurück'
         });
     }   
@@ -41,7 +41,7 @@ const nextPage = async (reactionId, res) => {
             emoji: {
                 name: '➡️'
             },
-            custom_id: `${NEXT_PAGE}:${inventory.id}:${parseInt(offset) + ITEM_LIMIT}`,
+            custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
             label: 'Weiter'
         });
     }
