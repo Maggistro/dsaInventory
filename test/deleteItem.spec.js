@@ -20,7 +20,7 @@ describe('deleteItem', () => {
             res,
         );
 
-        expect(await getItemByName(2, 'delete-item')).toBeTruthy();
+        expect(await getItemByName(15, 'delete-item')).toBeTruthy();
         await handleRequest(
             DELETE_ITEM,
             {
@@ -32,7 +32,7 @@ describe('deleteItem', () => {
             res,
         );
 
-        expect(await getItemByName(2, 'delete-item')).not.toBeTruthy();
+        expect(await getItemByName(15, 'delete-item')).not.toBeTruthy();
     });
 
     it('should delete an item from shared inventory', async () => {
@@ -51,7 +51,7 @@ describe('deleteItem', () => {
             res,
         );
 
-        expect(await getItemByName(3, 'delete-item')).toBeTruthy();
+        expect(await getItemByName(16, 'delete-item')).toBeTruthy();
         await handleRequest(
             DELETE_ITEM,
             {
@@ -64,7 +64,7 @@ describe('deleteItem', () => {
             res,
         );
 
-        expect(await getItemByName(3, 'delete-item')).not.toBeTruthy();
+        expect(await getItemByName(16, 'delete-item')).not.toBeTruthy();
     });
 
     it('should delete an item from shared inventory', async () => {
@@ -83,7 +83,7 @@ describe('deleteItem', () => {
             res,
         );
 
-        expect(await getItemByName(3, 'delete-item')).toBeTruthy();
+        expect(await getItemByName(16, 'delete-item')).toBeTruthy();
         await handleRequest(
             DELETE_ITEM,
             {
@@ -96,6 +96,6 @@ describe('deleteItem', () => {
             res,
         );
 
-        expect(await getItemByName(3, 'delete-item')).not.toBeTruthy();
+        expect(await getItemByName(16, 'delete-item')).not.toBeTruthy();
     });
 });

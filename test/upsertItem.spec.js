@@ -20,7 +20,7 @@ describe('upsertItem', () => {
             res,
         );
 
-        expect(await getItemByName(2, 'new-item')).toBeTruthy();
+        expect(await getItemByName(15, 'new-item')).toBeTruthy();
     });
 
     it('should add a new item to shared inventory', async () => {
@@ -39,7 +39,7 @@ describe('upsertItem', () => {
             res,
         );
 
-        expect(await getItemByName(3, 'new-item-shared')).toBeTruthy();
+        expect(await getItemByName(16, 'new-item-shared')).toBeTruthy();
     });
 
     it('should add a new item to shared inventory', async () => {
@@ -58,7 +58,7 @@ describe('upsertItem', () => {
             res,
         );
 
-        expect(await getItemByName(3, 'new-item-shared')).toBeTruthy();
+        expect(await getItemByName(16, 'new-item-shared')).toBeTruthy();
     });
 
     it('should update an item', async () => {
@@ -76,7 +76,7 @@ describe('upsertItem', () => {
             res,
         );
 
-        let item = await getItemByName(2, 'updated-item');
+        let item = await getItemByName(15, 'updated-item');
         expect(item.count).toBe(2);
         expect(item.weight).toBe(1.5);
 
@@ -93,7 +93,7 @@ describe('upsertItem', () => {
             res,
         );
 
-        item = await getItemByName(2, 'updated-item');
+        item = await getItemByName(15, 'updated-item');
         expect(item.count).toBe(5);
         expect(item.weight).toBe(2);
     });

@@ -24,4 +24,15 @@ describe('listItem', () => {
         };
         await handleRequest(LIST_ITEMS, { options: [{ value: 'shared', name: 'inventory' }] }, 'user1', res);
     });
+
+    it('should get first 20 items', async () => {
+        const res = {
+            send: (blob) => {
+                expect(blob.data.flags).toBe(InteractionResponseFlags.EPHEMERAL);
+                expect(blob.data.content).toContain('angel');
+                expect(blob.data.content).not.toContain('elf dolch');
+            },
+        };
+        await handleRequest(LIST_ITEMS, { options: [{ value: 'BigMom', name: 'inventory' }] }, 'BigMom', res);
+    });
 });
