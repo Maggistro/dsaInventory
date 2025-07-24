@@ -2,6 +2,7 @@ import { InteractionResponseType, InteractionResponseFlags } from 'discord-inter
 import { getInventory } from '../data/inventory.js';
 import { buildTable } from '../format/buildTable.js';
 import { ITEM_LIMIT } from './listItems.js';
+import { PREVIOUS_PAGE } from './previousPage.js';
 
 const NEXT_PAGE = 'nextpage';
 
@@ -18,7 +19,7 @@ const nextPage = async (reactionId, res) => {
         });
     }
 
-    let inventory = await getInventory("", inventoryId, offset, ITEM_LIMIT);
+    let inventory = await getInventory("", inventoryId);
 
 
     var components = [];
@@ -29,7 +30,7 @@ const nextPage = async (reactionId, res) => {
             emoji: {        
                 name: '⬅️'
             },
-            custom_id: `inventory_prev_page:${inventory.id}:${parseInt(offset) - ITEM_LIMIT}`,
+            custom_id: `${PREVIOUS_PAGE}:${inventory.id}:${parseInt(offset) - ITEM_LIMIT}`,
             label: 'Zurück'
         });
     }   
@@ -40,7 +41,7 @@ const nextPage = async (reactionId, res) => {
             emoji: {
                 name: '➡️'
             },
-            custom_id: `inventory_next_page:${inventory.id}:${parseInt(offset) + ITEM_LIMIT}`,
+            custom_id: `${NEXT_PAGE}:${inventory.id}:${parseInt(offset) + ITEM_LIMIT}`,
             label: 'Weiter'
         });
     }
@@ -48,7 +49,7 @@ const nextPage = async (reactionId, res) => {
     return res.send({
         type: InteractionResponseType.UPDATE_MESSAGE,
         data: {
-            content: buildTable(inventory),
+            content: buildTable(inventory, offset, ITEM_LIMIT),
             components: [
                 {
                     type: 1, // Action Row

@@ -1,6 +1,7 @@
-const buildTable = (inventory) => {
+const buildTable = (inventory, offset, limit) => {
     const columnSizes = [8, 6, 7];
-    inventory.items.forEach((item) => {
+    const items = inventory.items.slice(offset, limit);
+    items.forEach((item) => {
         if (columnSizes[0] < item.name.length) {
             columnSizes[0] = item.name.length;
         }
@@ -25,7 +26,7 @@ const buildTable = (inventory) => {
     return (
         `Inventar ${inventory.name}: \n` +
         '```' +
-        inventory.items.reduce(
+        items.reduce(
             (table, item) =>
                 table +
                 item.name.padEnd(columnSizes[0]) +

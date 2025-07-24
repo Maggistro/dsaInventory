@@ -21,14 +21,11 @@ const listItemsDefinition = {
 };
 
 
-const listItems = async (data, userId, res, offset = 0, limit = ITEM_LIMIT) => {
-    console.log('listItems called with userId:', userId, 'offset:', offset);
+const listItems = async (data, userId, res) => {
     const startTime = Date.now();
     
     const optionalName = getOptionByName(data.options, OPTIONS.INVENTORY);
-    let inventory = await getInventory(userId, optionalName, offset, limit);
-    
-    console.log('getInventory took:', Date.now() - startTime, 'ms');
+    let inventory = await getInventory(userId, optionalName);
 
     if (!inventory) {
         console.log('No inventory found for user:', userId, 'name:', optionalName);
@@ -46,22 +43,21 @@ const listItems = async (data, userId, res, offset = 0, limit = ITEM_LIMIT) => {
         return res.status(404).json({ error: 'Dieses Inventar gehört einem anderen Nutzer' });
     }
 
-    const content = buildTable(inventory);
-    console.log('Table content length:', content.length);
+    const content = buildTable(inventory, 0, ITEM_LIMIT);
     
     if (content.length > 1900) {
         console.warn('Content length exceeds safe limit:', content.length);
     }
 
     var components = [];
-    if (inventory.items.length > limit + offset) {
+    if (inventory.items.length > ITEM_LIMIT) {
         components.push({
             type: 2, // Button
             style: 2, // Secondary style
             emoji: {
                 name: '➡️'
             },
-            custom_id: `inventory_next_page:${inventory.id}:${limit}`,
+            custom_id: `inventory_next_page:${inventory.id}:${ITEM_LIMIT}`,
             label: 'Weiter'
         });
     }

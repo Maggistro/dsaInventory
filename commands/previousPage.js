@@ -29,7 +29,7 @@ const previousPage = async (reactionId, res) => {
             emoji: {        
                 name: '⬅️'
             },
-            custom_id: `inventory_prev_page:${inventory.id}:${parseInt(offset) - ITEM_LIMIT}`,
+            custom_id: `${PREVIOUS_PAGE}:${inventory.id}:${parseInt(offset) - ITEM_LIMIT}`,
             label: 'Zurück'
         });
     }   
@@ -40,7 +40,7 @@ const previousPage = async (reactionId, res) => {
             emoji: {
                 name: '➡️'
             },
-            custom_id: `inventory_next_page:${inventory.id}:${parseInt(offset) + ITEM_LIMIT}`,
+            custom_id: `${NEXT_PAGE}:${inventory.id}:${parseInt(offset) + ITEM_LIMIT}`,
             label: 'Weiter'
         });
     }
@@ -48,7 +48,7 @@ const previousPage = async (reactionId, res) => {
     return res.send({
         type: InteractionResponseType.UPDATE_MESSAGE,
         data: {
-            content: buildTable(inventory),
+            content: buildTable(inventory, offset, ITEM_LIMIT),
             components: [
                 {
                     type: 1, // Action Row
