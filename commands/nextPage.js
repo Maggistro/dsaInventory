@@ -33,13 +33,16 @@ const nextPage = async (reactionId, res) => {
     }];
     if (inventory.items.length > ITEM_LIMIT + parseInt(offset)) {
         components.push({
-            type: 2, // Button
-            style: 2, // Secondary style
-            emoji: {
-                name: '➡️'
-            },
-            custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
-            label: 'Weiter'
+            type: 1,
+            components: [{
+                type: 2, // Button
+                style: 2, // Secondary style
+                emoji: {
+                    name: '➡️'
+                },
+                custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
+                label: 'Weiter'
+            }]
         });
     }
 
