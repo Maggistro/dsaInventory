@@ -22,24 +22,32 @@ const nextPage = async (reactionId, res) => {
     let inventory = await getInventory("", inventoryName);
 
 
-    var components = [{
-        type: 2, // Button
-        style: 2, // Secondary style
-        emoji: {        
-            name: '⬅️'
-        },
-        custom_id: `${PREVIOUS_PAGE}:${inventory.name}:${parseInt(offset) - ITEM_LIMIT}`,
-        label: 'Zurück'
-    }];
+    var components = [
+        {
+            type: 1,
+            components: [{
+                type: 2, // Button
+                style: 2, // Secondary style
+                emoji: {        
+                    name: '⬅️'
+                },
+                custom_id: `${PREVIOUS_PAGE}:${inventory.name}:${parseInt(offset) - ITEM_LIMIT}`,
+                label: 'Zurück'
+            }]
+        }
+    ];
     if (inventory.items.length > ITEM_LIMIT + offset) {
         components.push({
-            type: 2, // Button
-            style: 2, // Secondary style
-            emoji: {
-                name: '➡️'
-            },
-            custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
-            label: 'Weiter'
+            type: 1,
+            components: [{
+                type: 2, // Button
+                style: 2, // Secondary style
+                emoji: {
+                    name: '➡️'
+                },
+                custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
+                label: 'Weiter'
+            }]
         });
     }
 
@@ -47,12 +55,7 @@ const nextPage = async (reactionId, res) => {
         type: InteractionResponseType.UPDATE_MESSAGE,
         data: {
             content: buildTable(inventory, offset, ITEM_LIMIT),
-            components: [
-                {
-                    type: 1, // Action Row
-                    components
-                }
-            ]
+            components,
         },
     });
 };
