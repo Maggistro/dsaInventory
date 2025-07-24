@@ -4,7 +4,7 @@ export const getAllInventories = async () => {
     return getDb().all('SELECT * from inventory');
 };
 
-export const getInventory = async (userId, name, offset = 0, limit = 1000) => {
+export const getInventory = async (userId, name, offset, limit) => {
     // if name was given, ignore userId
     let result = [];
     if (name) {

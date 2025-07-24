@@ -1,8 +1,10 @@
 import { InteractionResponseType, InteractionResponseFlags } from 'discord-interactions';
 import { getInventory } from '../data/inventory.js';
 import { getOptionByName, OPTIONS } from '../utils.js';
+import { buildTable } from '../format/buildTable.js';
 
 const LIST_ITEMS = 'listitems';
+const ITEM_LIMIT = 20;
 
 const listItemsDefinition = {
     name: LIST_ITEMS,
@@ -18,51 +20,10 @@ const listItemsDefinition = {
     type: 1,
 };
 
-const buildTable = (inventory) => {
-    const columnSizes = [8, 6, 7];
-    inventory.items.forEach((item) => {
-        if (columnSizes[0] < item.name.length) {
-            columnSizes[0] = item.name.length;
-        }
 
-        if (columnSizes[1] < item.count.toString().length) {
-            columnSizes[1] = item.count.toString().length;
-        }
-
-        if (columnSizes[2] < item.weight.toString().length) {
-            columnSizes[2] = item.weight.toString().length;
-        }
-    });
-
-    const header =
-        'Itemname'.padEnd(columnSizes[0]) +
-        ' | ' +
-        'Anzahl'.padEnd(columnSizes[1]) +
-        ' | ' +
-        'Gewicht'.padEnd(columnSizes[2]) +
-        '\n';
-
-    return (
-        `Inventar ${inventory.name}: \n` +
-        '```' +
-        inventory.items.reduce(
-            (table, item) =>
-                table +
-                item.name.padEnd(columnSizes[0]) +
-                ' | ' +
-                item.count.toString().padEnd(columnSizes[1]) +
-                ' | ' +
-                item.weight.toString().padEnd(columnSizes[2]) +
-                '\n',
-            header,
-        ) +
-        '```'
-    );
-};
-
-const listItems = async (data, userId, res) => {
+const listItems = async (data, userId, res, offset = 0, limit = ITEM_LIMIT) => {
     const optionalName = getOptionByName(data.options, OPTIONS.INVENTORY);
-    let inventory = await getInventory(userId, optionalName, 0, 20);
+    let inventory = await getInventory(userId, optionalName, offset, limit);
 
     if (!inventory) {
         return res.send({
@@ -78,6 +39,30 @@ const listItems = async (data, userId, res) => {
         return res.status(404).json({ error: 'Dieses Inventar gehört einem anderen Nutzer' });
     }
 
+    var components = [];
+    if (offset > 0) {
+        components.push({
+            type: 2, // Button
+            style: 2, // Secondary style
+            emoji: {        
+                name: '⬅️'
+            },
+            custom_id: `inventory_prev_page:${inventory.id}:${offset}`,
+            label: 'Zurück'
+        });
+    }   
+    if (inventory.items.length > limit + offset) {
+        components.push({
+            type: 2, // Button
+            style: 2, // Secondary style
+            emoji: {
+                name: '➡️'
+            },
+            custom_id: `inventory_next_page:${inventory.id}:${limit}`,
+            label: 'Weiter'
+        });
+    }
+
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -86,30 +71,11 @@ const listItems = async (data, userId, res) => {
             components: [
                 {
                     type: 1, // Action Row
-                    components: [
-                        {
-                            type: 2, // Button
-                            style: 2, // Secondary style
-                            emoji: {
-                                name: '⬅️'
-                            },
-                            custom_id: 'inventory_prev_page',
-                            label: 'Zurück'
-                        },
-                        {
-                            type: 2, // Button
-                            style: 2, // Secondary style
-                            emoji: {
-                                name: '➡️'
-                            },
-                            custom_id: 'inventory_next_page',
-                            label: 'Weiter'
-                        }
-                    ]
+                    components
                 }
             ]
         },
     });
 };
 
-export { LIST_ITEMS, listItemsDefinition, listItems };
+export { LIST_ITEMS, listItemsDefinition, listItems, ITEM_LIMIT};

@@ -3,6 +3,8 @@ import express from 'express';
 import { InteractionType, InteractionResponseType, verifyKeyMiddleware } from 'discord-interactions';
 import { handleRequest } from './handleRequest.js';
 import { autocomplete, UPSERT_ITEM } from './commands/upsertItem.js';
+import { nextPage, NEXT_PAGE } from './commands/nextPage.js';
+import { previousPage, PREVIOUS_PAGE } from './commands/previousPage.js';
 
 // Create an express app
 const app = express();
@@ -46,6 +48,18 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         switch (name) {
             case UPSERT_ITEM:
                 return autocomplete(data, userId, res);
+        }
+    }
+
+    /**
+     * Handle reaction buttons
+     */
+    if (type === InteractionType.MESSAGE_COMPONENT) {
+        if (data.custom_id.startsWith(NEXT_PAGE)) {
+            return await nextPage(data.custom_id, res);
+        }
+        if (data.custom_id.startsWith(PREVIOUS_PAGE)) {
+            return await previousPage(data.custom_id, res);
         }
     }
 
