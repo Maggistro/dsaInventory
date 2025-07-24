@@ -2,6 +2,7 @@ import { InteractionResponseType, InteractionResponseFlags } from 'discord-inter
 import { getInventory } from '../data/inventory.js';
 import { getOptionByName, OPTIONS } from '../utils.js';
 import { buildTable } from '../format/buildTable.js';
+import { NEXT_PAGE } from './nextPage.js';
 
 const LIST_ITEMS = 'listitems';
 const ITEM_LIMIT = 20;
@@ -57,7 +58,7 @@ const listItems = async (data, userId, res) => {
             emoji: {
                 name: '➡️'
             },
-            custom_id: `inventory_next_page:${inventory.id}:${ITEM_LIMIT}`,
+            custom_id: `${NEXT_PAGE}:${inventory.id}:${ITEM_LIMIT}`,
             label: 'Weiter'
         });
     }
