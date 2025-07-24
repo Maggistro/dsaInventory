@@ -6,9 +6,9 @@ import { ITEM_LIMIT } from './listItems.js';
 const PREVIOUS_PAGE = 'previouspage';
 
 const previousPage = async (reactionId, res) => {
-    const [_, inventoryId, offset] = reactionId.split(':');
+    const [_, inventoryName, offset] = reactionId.split(':');
     
-    if (!inventoryId) {
+    if (!inventoryName) {
         return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
@@ -18,7 +18,7 @@ const previousPage = async (reactionId, res) => {
         });
     }
 
-    let inventory = await getInventory("", inventoryId, offset, ITEM_LIMIT);
+    let inventory = await getInventory("", inventoryName);
 
 
     var components = [];
@@ -33,17 +33,15 @@ const previousPage = async (reactionId, res) => {
             label: 'Zurück'
         });
     }   
-    if (inventory.items.length > ITEM_LIMIT + offset) {
-        components.push({
-            type: 2, // Button
-            style: 2, // Secondary style
-            emoji: {
-                name: '➡️'
-            },
-            custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
-            label: 'Weiter'
-        });
-    }
+    components.push({
+        type: 2, // Button
+        style: 2, // Secondary style
+        emoji: {
+            name: '➡️'
+        },
+        custom_id: `${NEXT_PAGE}:${inventory.name}:${parseInt(offset) + ITEM_LIMIT}`,
+        label: 'Weiter'
+    });
 
     return res.send({
         type: InteractionResponseType.UPDATE_MESSAGE,
