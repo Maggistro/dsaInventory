@@ -4,16 +4,16 @@ export const getAllInventories = async () => {
     return getDb().all('SELECT * from inventory');
 };
 
-export const getInventory = async (userId, name) => {
+export const getInventory = async (userId, name, offset = 0, limit = 1000) => {
     // if name was given, ignore userId
     let result = [];
     if (name) {
         result = await getDb().all(
-            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE inventory.name = '${name}'`,
+            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE inventory.name = '${name}' ORDER BY item.name LIMIT ${limit} OFFSET ${offset}`,
         );
     } else {
         result = await getDb().all(
-            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE (userId = '${userId}' AND active = 1)`,
+            `SELECT inventory.id as inv_id, inventory.name as inv_name, * FROM inventory LEFT JOIN item ON inventory.id = item.inventory WHERE (userId = '${userId}' AND active = 1) ORDER BY item.name LIMIT ${limit} OFFSET ${offset}`,
         );
     }
 

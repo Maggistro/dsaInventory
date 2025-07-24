@@ -62,7 +62,7 @@ const buildTable = (inventory) => {
 
 const listItems = async (data, userId, res) => {
     const optionalName = getOptionByName(data.options, OPTIONS.INVENTORY);
-    let inventory = await getInventory(userId, optionalName);
+    let inventory = await getInventory(userId, optionalName, 0, 20);
 
     if (!inventory) {
         return res.send({
@@ -83,6 +83,31 @@ const listItems = async (data, userId, res) => {
         data: {
             flags: InteractionResponseFlags.EPHEMERAL,
             content: buildTable(inventory),
+            components: [
+                {
+                    type: 1, // Action Row
+                    components: [
+                        {
+                            type: 2, // Button
+                            style: 2, // Secondary style
+                            emoji: {
+                                name: '⬅️'
+                            },
+                            custom_id: 'inventory_prev_page',
+                            label: 'Zurück'
+                        },
+                        {
+                            type: 2, // Button
+                            style: 2, // Secondary style
+                            emoji: {
+                                name: '➡️'
+                            },
+                            custom_id: 'inventory_next_page',
+                            label: 'Weiter'
+                        }
+                    ]
+                }
+            ]
         },
     });
 };
