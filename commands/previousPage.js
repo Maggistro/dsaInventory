@@ -2,6 +2,7 @@ import { InteractionResponseType, InteractionResponseFlags } from 'discord-inter
 import { getInventory } from '../data/inventory.js';
 import { buildTable } from '../format/buildTable.js';
 import { ITEM_LIMIT } from './listItems.js';
+import { NEXT_PAGE } from './nextPage.js';
 
 const PREVIOUS_PAGE = 'previouspage';
 
@@ -32,7 +33,7 @@ const previousPage = async (reactionId, res) => {
             custom_id: `${PREVIOUS_PAGE}:${inventory.name}:${parseInt(offset) - ITEM_LIMIT}`,
             label: 'Zurück'
         });
-    }   
+    }
     components.push({
         type: 2, // Button
         style: 2, // Secondary style
@@ -47,12 +48,10 @@ const previousPage = async (reactionId, res) => {
         type: InteractionResponseType.UPDATE_MESSAGE,
         data: {
             content: buildTable(inventory, offset, ITEM_LIMIT),
-            components: [
-                {
-                    type: 1, // Action Row
-                    components
-                }
-            ]
+            components: components.length > 0 ? [{
+                type: 1, // Action Row
+                components
+            }] : []
         },
     });
 };

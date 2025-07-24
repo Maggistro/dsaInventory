@@ -31,7 +31,7 @@ const nextPage = async (reactionId, res) => {
         custom_id: `${PREVIOUS_PAGE}:${inventory.name}:${parseInt(offset) - ITEM_LIMIT}`,
         label: 'Zurück'
     }];
-    if (inventory.items.length > ITEM_LIMIT + offset) {
+    if (inventory.items.length > ITEM_LIMIT + parseInt(offset)) {
         components.push({
             type: 2, // Button
             style: 2, // Secondary style
@@ -47,12 +47,10 @@ const nextPage = async (reactionId, res) => {
         type: InteractionResponseType.UPDATE_MESSAGE,
         data: {
             content: buildTable(inventory, offset, ITEM_LIMIT),
-            components: [
-                {
-                    type: 1, // Action Row
-                    components
-                }
-            ]
+            components: components.length > 0 ? [{
+                type: 1, // Action Row
+                components
+            }] : []
         },
     });
 };
